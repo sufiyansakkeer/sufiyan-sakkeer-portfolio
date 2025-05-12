@@ -234,156 +234,266 @@ class _ContactScreenState extends State<ContactScreen> {
       return _buildSuccessMessage(context);
     }
 
-    return Card(
-      elevation: DesignSystem.elevationSm,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(DesignSystem.radiusLg),
+    // Removed Card for a more integrated look
+    return Container(
+      padding: const EdgeInsets.all(DesignSystem.spacingMd),
+      decoration: BoxDecoration(
+        // Optional: Add a subtle background or border if needed
+        // color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+        // borderRadius: BorderRadius.circular(DesignSystem.radiusLg),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(DesignSystem.spacingMd),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Send me a message',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Send me a message',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
 
-              const SizedBox(height: DesignSystem.spacingMd),
-
-              // Name field
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(),
+            const SizedBox(height: DesignSystem.spacingLg), // Increased spacing
+            // Name field - Modernized
+            TextFormField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Name',
+                // prefixIcon: Icon(Icons.person), // Optional: Keep or remove prefix icons
+                // border: UnderlineInputBorder(), // Use Underline border
+                filled: true, // Add a subtle fill color
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withOpacity(0.05),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: DesignSystem.spacingSm,
+                  horizontal: DesignSystem.spacingMd,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: DesignSystem.spacingSm),
-
-              // Email field
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
+                floatingLabelBehavior: FloatingLabelBehavior.auto, // Or .never
+                border: OutlineInputBorder(
+                  // Keep outline but customize
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide.none, // Remove the default border line
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: DesignSystem.spacingSm),
-
-              // Subject field
-              TextFormField(
-                controller: _subjectController,
-                decoration: const InputDecoration(
-                  labelText: 'Subject',
-                  prefixIcon: Icon(Icons.subject),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a subject';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: DesignSystem.spacingSm),
-
-              // Message field
-              TextFormField(
-                controller: _messageController,
-                decoration: const InputDecoration(
-                  labelText: 'Message',
-                  prefixIcon: Icon(Icons.message),
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
-                ),
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your message';
-                  }
-                  return null;
-                },
-              ),
-
-              if (_errorMessage != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 1.5,
                   ),
                 ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your name';
+                }
+                return null;
+              },
+            ),
 
-              const SizedBox(height: DesignSystem.spacingMd),
-
-              // Submit button
-              SizedBox(
-                width: double.infinity,
-                child: HoverButton(
-                  onPressed: _isSubmitting ? () {} : () => _submitForm(),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: DesignSystem.spacingSm,
-                    horizontal: DesignSystem.spacingMd,
+            const SizedBox(height: DesignSystem.spacingMd), // Adjusted spacing
+            // Email field - Modernized
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                // prefixIcon: Icon(Icons.email),
+                filled: true,
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withOpacity(0.05),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: DesignSystem.spacingSm,
+                  horizontal: DesignSystem.spacingMd,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 1.5,
                   ),
-                  elevation: DesignSystem.elevationSm,
-                  hoverElevation: DesignSystem.elevationMd,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (_isSubmitting)
-                        Container(
-                          width: 24,
-                          height: 24,
-                          padding: const EdgeInsets.all(2.0),
-                          margin: const EdgeInsets.only(
-                            right: DesignSystem.spacingXs,
-                          ),
-                          child: const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 3,
-                          ),
-                        )
-                      else
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            right: DesignSystem.spacingXs,
-                          ),
-                          child: Icon(Icons.send),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                if (!RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: DesignSystem.spacingMd), // Adjusted spacing
+            // Subject field - Modernized
+            TextFormField(
+              controller: _subjectController,
+              decoration: InputDecoration(
+                labelText: 'Subject',
+                // prefixIcon: Icon(Icons.subject),
+                filled: true,
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withOpacity(0.05),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: DesignSystem.spacingSm,
+                  horizontal: DesignSystem.spacingMd,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a subject';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: DesignSystem.spacingMd), // Adjusted spacing
+            // Message field - Modernized
+            TextFormField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                labelText: 'Message',
+                // prefixIcon: Icon(Icons.message), // Aligning prefix icon can be tricky with multiline
+                filled: true,
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withOpacity(0.05),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: DesignSystem.spacingSm,
+                  horizontal: DesignSystem.spacingMd,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                alignLabelWithHint: true, // Good for multiline
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusMd),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              maxLines: 5,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your message';
+                }
+                return null;
+              },
+            ),
+
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: DesignSystem.spacingMd,
+                ), // Adjusted padding
+                child: Text(
+                  _errorMessage!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize:
+                        Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.fontSize, // Smaller error text
+                  ),
+                ),
+              ),
+
+            const SizedBox(
+              height: DesignSystem.spacingLg,
+            ), // Increased spacing before button
+            // Submit button - Enhanced
+            SizedBox(
+              width: double.infinity,
+              child: HoverButton(
+                // Assuming HoverButton handles hover effects well
+                onPressed: _isSubmitting ? () {} : () => _submitForm(),
+                padding: const EdgeInsets.symmetric(
+                  // Slightly larger padding
+                  vertical:
+                      DesignSystem.spacingMd, // Increased vertical padding
+                  horizontal: DesignSystem.spacingLg,
+                ),
+                elevation: DesignSystem.elevationXs, // Subtle base elevation
+                hoverElevation:
+                    DesignSystem.elevationSm, // Clearer hover elevation
+                borderRadius: BorderRadius.circular(
+                  DesignSystem.radiusMd,
+                ), // Consistent border radius
+                // Optional: Add gradient or specific background color
+                // backgroundColor: Theme.of(context).colorScheme.primary,
+                // hoverBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_isSubmitting)
+                      Container(
+                        width: 20, // Slightly smaller indicator
+                        height: 20,
+                        margin: const EdgeInsets.only(
+                          right: DesignSystem.spacingSm,
+                        ), // Adjusted margin
+                        child: CircularProgressIndicator(
+                          color:
+                              Theme.of(
+                                context,
+                              ).colorScheme.onPrimary, // Use theme color
+                          strokeWidth: 2.5,
                         ),
-                      Text(_isSubmitting ? 'Sending...' : 'Send Message'),
-                    ],
-                  ),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: DesignSystem.spacingSm,
+                        ), // Adjusted padding
+                        child: Icon(
+                          Icons.send,
+                          size: 20, // Consistent icon size
+                          color:
+                              Theme.of(
+                                context,
+                              ).colorScheme.onPrimary, // Use theme color
+                        ),
+                      ),
+                    Text(
+                      _isSubmitting ? 'Sending...' : 'Send Message',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        // Use labelLarge style
+                        color:
+                            Theme.of(
+                              context,
+                            ).colorScheme.onPrimary, // Use theme color
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -39,8 +39,9 @@ class _AnimatedTextRevealState extends State<AnimatedTextReveal>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  String _visibleText = '';
-  bool _isInitialized = false;
+  // Use ValueNotifier for typewriter effect to avoid unnecessary setState calls
+  final ValueNotifier<String> _visibleTextNotifier = ValueNotifier<String>('');
+  bool _isAnimatingTypewriter = false; // Track typewriter state
 
   @override
   void initState() {
@@ -83,36 +84,67 @@ class _AnimatedTextRevealState extends State<AnimatedTextReveal>
     } else {
       _controller.value = 1.0;
       if (widget.animationType == StaggeredTextAnimation.typewriter) {
-        _visibleText = widget.text;
+        _visibleTextNotifier.value =
+            widget.text; // Set initial full text if not animating
       }
     }
   }
 
   void _animateTypewriter() {
-    if (!mounted) return;
+    if (!mounted || _isAnimatingTypewriter)
+      return; // Prevent concurrent animations
 
-    setState(() {
-      _visibleText = '';
-      _isInitialized = true;
-    });
+    _isAnimatingTypewriter = true;
+    _visibleTextNotifier.value = ''; // Reset visible text
 
     _controller.reset();
-    _controller.duration = Duration(milliseconds: 50 * widget.text.length);
+    // Ensure duration is at least 1ms to avoid division by zero or negative duration
+    final int calculatedDuration = 50 * widget.text.length;
+    _controller.duration = Duration(
+      milliseconds: calculatedDuration > 0 ? calculatedDuration : 1,
+    );
 
     Animation<int> typewriterAnimation = IntTween(
       begin: 0,
       end: widget.text.length,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
-    typewriterAnimation.addListener(() {
+    // Define the listener function first
+    void listener() {
       if (mounted) {
-        setState(() {
-          _visibleText = widget.text.substring(0, typewriterAnimation.value);
-        });
+        _visibleTextNotifier.value = widget.text.substring(
+          0,
+          typewriterAnimation.value,
+        );
       }
-    });
+    }
 
-    _controller.forward();
+    // Define the status listener, which references the listener function
+    void statusListener(AnimationStatus status) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
+        if (mounted) {
+          _isAnimatingTypewriter = false;
+          // Ensure listeners are removed only if they were added
+          _controller.removeStatusListener(statusListener);
+          typewriterAnimation.removeListener(listener);
+        }
+      }
+    }
+
+    // Add the listeners
+    typewriterAnimation.addListener(listener);
+    _controller.addStatusListener(statusListener);
+
+    _controller.forward().catchError((e) {
+      // Handle potential errors during animation start
+      if (mounted) {
+        _isAnimatingTypewriter = false;
+        _controller.removeStatusListener(statusListener);
+        typewriterAnimation.removeListener(listener);
+      }
+      debugPrint("Error starting typewriter animation: $e");
+    });
   }
 
   @override
@@ -139,9 +171,7 @@ class _AnimatedTextRevealState extends State<AnimatedTextReveal>
       } else {
         _controller.value = 1.0;
         if (widget.animationType == StaggeredTextAnimation.typewriter) {
-          setState(() {
-            _visibleText = widget.text;
-          });
+          _visibleTextNotifier.value = widget.text; // Update notifier directly
         }
       }
     }
@@ -155,22 +185,21 @@ class _AnimatedTextRevealState extends State<AnimatedTextReveal>
 
   @override
   Widget build(BuildContext context) {
+    // Use ValueListenableBuilder for typewriter effect
     if (widget.animationType == StaggeredTextAnimation.typewriter) {
-      if (!_isInitialized && !widget.animate) {
-        return Text(
-          widget.text,
-          style: widget.style,
-          textAlign: widget.textAlign,
-        );
-      }
-
-      return Text(
-        _visibleText,
-        style: widget.style,
-        textAlign: widget.textAlign,
+      return ValueListenableBuilder<String>(
+        valueListenable: _visibleTextNotifier,
+        builder: (context, visibleText, child) {
+          return Text(
+            visibleText, // Use value from notifier
+            style: widget.style,
+            textAlign: widget.textAlign,
+          );
+        },
       );
     }
 
+    // Keep AnimatedBuilder for other animation types
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -267,7 +296,9 @@ class _StaggeredTextListState extends State<StaggeredTextList>
               : CrossAxisAlignment.center,
       children: List.generate(widget.textItems.length * 2 - 1, (index) {
         if (index.isOdd) {
-          return SizedBox(height: widget.spacing);
+          // Add const for potential performance improvement
+          return const SizedBox.shrink(); // Use shrink if spacing is 0, else SizedBox
+          // return SizedBox(height: widget.spacing); // Original
         }
 
         final textIndex = index ~/ 2;

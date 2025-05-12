@@ -331,79 +331,69 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _buildProfileImage(BuildContext context) {
-    // Reduce parallax intensity on mobile for better performance
-    final parallaxIntensity = Helpers.isMobile(context) ? 15.0 : 30.0;
     final imageSize = Helpers.isMobile(context) ? 280.0 : 320.0;
 
     return Center(
       child: RepaintBoundary(
         // Add RepaintBoundary to isolate repainting
-        child: ParallaxEffect(
-          intensity: parallaxIntensity,
-          enableScrollEffect: true,
-          // Disable mouse tracking on mobile for better performance
-          enableMouseTracking: !Helpers.isMobile(context),
-          child: Container(
-            width: imageSize,
-            height: imageSize,
-            constraints: BoxConstraints(
-              maxWidth: imageSize,
-              maxHeight: imageSize,
-            ),
-            child: SlideRevealTransition(
-              duration: const Duration(milliseconds: 1000),
-              delay: const Duration(milliseconds: 300),
-              direction: SlideDirection.left,
-              child: Stack(
-                children: [
-                  // Glowing background
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: RadialGradient(
-                        colors: [
-                          Theme.of(context).colorScheme.primary.withAlpha(80),
-                          Theme.of(context).colorScheme.primary.withAlpha(30),
-                        ],
-                        stops: const [0.5, 1.0],
-                      ),
-                      // Simpler shadow for better performance
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withAlpha(40),
-                          blurRadius: 20,
-                          spreadRadius: 0,
-                          offset: const Offset(0, 2),
-                        ),
+        child: Container(
+          width: imageSize,
+          height: imageSize,
+          constraints: BoxConstraints(
+            maxWidth: imageSize,
+            maxHeight: imageSize,
+          ),
+          child: SlideRevealTransition(
+            duration: const Duration(milliseconds: 1000),
+            delay: const Duration(milliseconds: 300),
+            direction: SlideDirection.left,
+            child: Stack(
+              children: [
+                // Glowing background
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary.withAlpha(80),
+                        Theme.of(context).colorScheme.primary.withAlpha(30),
                       ],
+                      stops: const [0.5, 1.0],
                     ),
-                  ),
-
-                  // Only show rotating border on desktop for better performance
-                  if (!Helpers.isMobile(context))
-                    RotatingBorder(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withAlpha(100),
-                      width: 2,
-                    ),
-
-                  // Profile image
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipOval(
-                      child: SvgPicture.asset(
-                        'assets/svg/profile_pic.svg',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
+                    // Simpler shadow for better performance
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withAlpha(40),
+                        blurRadius: 20,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 2),
                       ),
+                    ],
+                  ),
+                ),
+
+                // Only show rotating border on desktop for better performance
+                if (!Helpers.isMobile(context))
+                  RotatingBorder(
+                    color: Theme.of(context).colorScheme.primary.withAlpha(100),
+                    width: 2,
+                  ),
+
+                // Profile image
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipOval(
+                    child: SvgPicture.asset(
+                      'assets/svg/profile_pic.svg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -532,67 +522,58 @@ class AboutScreen extends StatelessWidget {
                       ? WrapAlignment.center
                       : WrapAlignment.start,
               children: [
-                // Download Resume button with its own parallax effect
-                ParallaxEffect(
-                  intensity: 25.0,
-                  enableScrollEffect: true,
-                  child: HoverEffect(
-                    scale: 1.05,
-                    enableElevation: true,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Download resume functionality
-                      },
-                      icon: const Icon(Icons.download),
-                      label: const Text('Download Resume'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          horizontal:
-                              Helpers.isMobile(context)
-                                  ? DesignSystem.spacingSm
-                                  : DesignSystem.spacingMd,
-                          vertical: DesignSystem.spacingSm,
-                        ),
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
+                // Download Resume button
+                HoverEffect(
+                  scale: 1.05,
+                  enableElevation: true,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      // Download resume functionality
+                    },
+                    icon: const Icon(Icons.download),
+                    label: const Text('Download Resume'),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            Helpers.isMobile(context)
+                                ? DesignSystem.spacingSm
+                                : DesignSystem.spacingMd,
+                        vertical: DesignSystem.spacingSm,
                       ),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),
 
-                // Contact Me button with its own parallax effect
-                ParallaxEffect(
-                  intensity: 15.0,
-                  enableScrollEffect: true,
-                  child: HoverEffect(
-                    scale: 1.05,
-                    enableElevation: true,
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        // Find the parent HomeScreen and scroll to contact section
-                        final homeScreenState =
-                            context.findAncestorStateOfType<HomeScreenState>();
-                        if (homeScreenState != null) {
-                          homeScreenState.scrollToSection(
-                            4,
-                          ); // Contact section index
-                        }
-                      },
-                      icon: const Icon(Icons.email),
-                      label: const Text('Contact Me'),
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          horizontal:
-                              Helpers.isMobile(context)
-                                  ? DesignSystem.spacingSm
-                                  : DesignSystem.spacingMd,
-                          vertical: DesignSystem.spacingSm,
-                        ),
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 2,
-                        ),
+                // Contact Me button
+                HoverEffect(
+                  scale: 1.05,
+                  enableElevation: true,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      // Find the parent HomeScreen and scroll to contact section
+                      final homeScreenState =
+                          context.findAncestorStateOfType<HomeScreenState>();
+                      if (homeScreenState != null) {
+                        homeScreenState.scrollToSection(
+                          4,
+                        ); // Contact section index
+                      }
+                    },
+                    icon: const Icon(Icons.email),
+                    label: const Text('Contact Me'),
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            Helpers.isMobile(context)
+                                ? DesignSystem.spacingSm
+                                : DesignSystem.spacingMd,
+                        vertical: DesignSystem.spacingSm,
+                      ),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
                       ),
                     ),
                   ),
@@ -656,9 +637,9 @@ class AboutScreen extends StatelessWidget {
 
   Widget _buildStatsSection(BuildContext context) {
     final stats = [
-      {'label': 'Years Experience', 'value': '3+'},
-      {'label': 'Projects Completed', 'value': '15+'},
-      {'label': 'Clients', 'value': '10+'},
+      {'label': 'Years Experience', 'value': '2+'},
+      {'label': 'Projects Completed', 'value': '10+'},
+      // {'label': 'Clients', 'value': '10+'},
     ];
 
     return SlideRevealTransition(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/page_reveal_transition.dart';
 import 'package:portfolio/widgets/parallax_effect.dart';
+import 'package:visibility_detector/visibility_detector.dart'; // Import the package
 
 class AnimatedSectionContainer extends StatefulWidget {
   final Widget child;
@@ -37,7 +38,10 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   bool _isVisible = false;
-  final GlobalKey _sectionKey = GlobalKey();
+  // final GlobalKey _sectionKey = GlobalKey(); // No longer needed
+
+  // Key for VisibilityDetector
+  final Key _visibilityKey = UniqueKey();
 
   @override
   void initState() {
@@ -57,10 +61,10 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
       _isVisible = true;
     }
 
-    // Check if section is in viewport after initial render
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkVisibility();
-    });
+    // No need for initial check with VisibilityDetector
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _checkVisibility();
+    // });
   }
 
   @override
@@ -81,29 +85,21 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
     super.dispose();
   }
 
-  void _checkVisibility() {
-    final RenderBox? renderBox =
-        _sectionKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
+  // void _checkVisibility() { ... } // Remove this method
 
-    final position = renderBox.localToGlobal(Offset.zero);
-    final size = renderBox.size;
-    final screenHeight = MediaQuery.of(context).size.height;
+  void _handleVisibilityChange(VisibilityInfo info) {
+    // Use visibleFraction to determine visibility (e.g., > 0.1 means at least 10% visible)
+    final bool isNowVisible = info.visibleFraction > 0.1 || widget.isActive;
 
-    // Check if at least 30% of the section is visible
-    final visibleTop = position.dy < screenHeight;
-    final visibleBottom = position.dy + size.height * 0.3 > 0;
-    final isVisible = visibleTop && visibleBottom || widget.isActive;
-
-    if (isVisible != _isVisible) {
+    if (isNowVisible != _isVisible) {
       setState(() {
-        _isVisible = isVisible;
+        _isVisible = isNowVisible;
       });
 
-      if (isVisible) {
+      if (isNowVisible) {
         _controller.forward();
       } else {
-        // Only reverse if not active and not visible
+        // Only reverse if not explicitly active
         if (!widget.isActive) {
           _controller.reverse();
         }
@@ -132,7 +128,7 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
     minHeight -= (safeAreaPadding.top + safeAreaPadding.bottom);
 
     final content = Container(
-      key: _sectionKey,
+      // key: _sectionKey, // No longer needed here
       width: double.infinity,
       constraints: BoxConstraints(minHeight: minHeight),
       padding: widget.padding ?? Helpers.getResponsivePadding(context),
@@ -161,33 +157,36 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
       ),
     );
 
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification is ScrollUpdateNotification) {
-          _checkVisibility();
-        }
-        return false;
-      },
+    // Wrap the animated content with VisibilityDetector
+    return VisibilityDetector(
+      key: _visibilityKey, // Use the unique key
+      onVisibilityChanged: _handleVisibilityChange,
       child: AnimatedBuilder(
         animation: _fadeAnimation,
         builder: (context, child) {
-          // Only use PageRevealTransition when the section is becoming visible
-          if (_isVisible || widget.isActive) {
+          // The logic inside AnimatedBuilder remains similar,
+          // but driven by _isVisible state updated by VisibilityDetector
+          if (_isVisible) {
+            // Check _isVisible state directly
             return Opacity(
               opacity: _fadeAnimation.value,
               child: PageRevealTransition(
-                isRevealing: true,
+                isRevealing: true, // Keep revealing logic based on state
                 duration: widget.animationDuration,
                 curve: widget.animationCurve,
                 revealColor: widget.revealColor,
-                child: content,
+                child: content, // Pass the original content
               ),
             );
           } else {
             // When not visible, just show the content with opacity animation
+            // Ensure content is still part of the tree for VisibilityDetector
             return Opacity(opacity: _fadeAnimation.value, child: content);
           }
         },
+        // Pass the content as the child to AnimatedBuilder if needed,
+        // though it's directly used within the builder here.
+        // child: content,
       ),
     );
   }

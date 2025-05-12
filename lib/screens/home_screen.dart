@@ -101,8 +101,8 @@ class HomeScreenState extends State<HomeScreen> {
     // Get screen dimensions and orientation
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
-    final height = screenSize.height;
-    final isLandscape = width > height;
+    // final height = screenSize.height;
+    // final isLandscape = width > height;
     final isMobile = Helpers.isMobile(context);
 
     // Define section background colors
@@ -157,35 +157,6 @@ class HomeScreenState extends State<HomeScreen> {
                 const ClampingScrollPhysics(), // Smoother scrolling on mobile
             child: Column(
               children: [
-                // Container(
-                //   color: Colors.red,
-                //   width: double.infinity,
-                //   height: 50,
-                // ),
-                // About Section
-                // AnimatedSectionContainer(
-                //   key: _sectionKeys[0],
-                //   isActive: _activeSection == 0,
-                //   backgroundColor: sectionColors[0],
-                //   revealColor: revealColors[0],
-                //   enableParallax:
-                //       false, // Disable parallax for the entire section
-                //   parallaxIntensity: aboutParallaxIntensity,
-                //   animationDuration: const Duration(milliseconds: 800),
-                //   animationCurve: Curves.easeInOutCubic,
-                //   padding: EdgeInsets.zero, // Remove padding
-                //   child: const AboutScreen(),
-                // ),
-
-                // Skills Section
-                // SimpleSectionContainer(
-                //   key: _sectionKeys[0],
-                //   padding: EdgeInsets.zero,
-                //   childWidth: double.infinity,
-                //   removeOnlyBottomPadding: true,
-                //   // backgroundColor: sectionColors[0],
-                //   child:
-                // ),
                 AboutScreen(key: _sectionKeys[0]),
                 SimpleSectionContainer(
                   key: _sectionKeys[1],
@@ -200,8 +171,7 @@ class HomeScreenState extends State<HomeScreen> {
                   backgroundColor: sectionColors[2],
                   revealColor: revealColors[2],
                   enableParallax:
-                      !isMobile ||
-                      !isLandscape, // Disable parallax in landscape on mobile
+                      false, // Disable parallax in landscape on mobile
                   parallaxIntensity: projectsParallaxIntensity,
                   animationDuration: const Duration(milliseconds: 800),
                   animationCurve: Curves.easeInOutCubic,
