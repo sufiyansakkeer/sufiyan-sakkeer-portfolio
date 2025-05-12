@@ -39,17 +39,30 @@ class DesignSystem {
   static const Curve curveSharp = Curves.easeInOutCubic;
   static const Curve curveElastic = Curves.elasticOut;
 
-  // Responsive breakpoints
-  static const double breakpointMobile = 600;
+  // Responsive breakpoints - refined for better transitions
+  static const double breakpointMobile =
+      650; // Slightly increased for better mobile experience
   static const double breakpointTablet = 1200;
   static const double breakpointDesktop = 1800;
 
-  // Responsive padding
+  // Responsive padding - improved for better spacing on mobile
   static EdgeInsets getPadding(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final isLandscape = width > height;
 
     if (width < breakpointMobile) {
-      return const EdgeInsets.all(spacingSm);
+      // For very small devices or landscape mode on mobile, use smaller padding
+      if (width < 400 || isLandscape) {
+        return const EdgeInsets.symmetric(
+          horizontal: spacingXs,
+          vertical: spacingSm,
+        );
+      }
+      return const EdgeInsets.symmetric(
+        horizontal: spacingSm,
+        vertical: spacingSm,
+      );
     } else if (width < breakpointTablet) {
       return const EdgeInsets.all(spacingMd);
     } else {
@@ -57,11 +70,20 @@ class DesignSystem {
     }
   }
 
-  // Section padding
+  // Section padding - optimized for mobile
   static EdgeInsets getSectionPadding(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final isLandscape = width > height;
 
     if (width < breakpointMobile) {
+      // For very small devices or landscape mode, reduce vertical padding
+      if (width < 400 || isLandscape) {
+        return const EdgeInsets.symmetric(
+          horizontal: spacingSm,
+          vertical: spacingMd, // Reduced vertical padding for small screens
+        );
+      }
       return const EdgeInsets.symmetric(
         horizontal: spacingSm,
         vertical: spacingLg,
@@ -79,22 +101,37 @@ class DesignSystem {
     }
   }
 
-  // Card padding
+  // Card padding - optimized for different screen sizes
   static EdgeInsets getCardPadding(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final isLandscape = width > height;
 
     if (width < breakpointMobile) {
+      // For very small devices or landscape mode, use smaller padding
+      if (width < 400 || isLandscape) {
+        return const EdgeInsets.symmetric(
+          horizontal: spacingSm,
+          vertical: spacingXs,
+        );
+      }
       return const EdgeInsets.all(spacingSm);
     } else {
       return const EdgeInsets.all(spacingMd);
     }
   }
 
-  // Content width constraints
+  // Content width constraints - optimized for better responsiveness
   static double getContentMaxWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final isLandscape = width > height;
 
     if (width < breakpointMobile) {
+      // For very small devices or landscape mode, use more screen space
+      if (width < 400 || isLandscape) {
+        return width * 0.98; // 98% of screen width for small devices
+      }
       return width * 0.95; // 95% of screen width
     } else if (width < breakpointTablet) {
       return width * 0.85; // 85% of screen width
@@ -102,6 +139,27 @@ class DesignSystem {
       return width * 0.75; // 75% of screen width
     } else {
       return 1400; // Max fixed width
+    }
+  }
+
+  // Get safe area padding for notched devices
+  static EdgeInsets getSafeAreaPadding(BuildContext context) {
+    return MediaQuery.of(context).padding;
+  }
+
+  // Get responsive font size
+  static double getResponsiveFontSize(
+    BuildContext context,
+    double baseFontSize,
+  ) {
+    final width = MediaQuery.of(context).size.width;
+
+    if (width < 360) {
+      return baseFontSize * 0.8; // 80% of base size for very small screens
+    } else if (width < breakpointMobile) {
+      return baseFontSize * 0.9; // 90% of base size for mobile
+    } else {
+      return baseFontSize; // Base size for larger screens
     }
   }
 

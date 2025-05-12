@@ -3,6 +3,9 @@ import 'package:portfolio/models/project.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/hover_effect.dart';
 import 'package:portfolio/config/design_system.dart';
+import 'package:portfolio/widgets/animated_text_reveal.dart';
+import 'package:portfolio/widgets/page_reveal_transition.dart';
+import 'package:portfolio/widgets/parallax_effect.dart';
 
 class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key});
@@ -21,9 +24,12 @@ class ProjectsScreen extends StatelessWidget {
           children: [
             // Section title
             Center(
-              child: Text(
-                'Projects',
+              child: AnimatedTextReveal(
+                text: 'Projects',
                 style: Theme.of(context).textTheme.displayMedium,
+                duration: const Duration(milliseconds: 800),
+                delay: const Duration(milliseconds: 200),
+                animationType: StaggeredTextAnimation.fadeSlideUp,
               ),
             ),
 
@@ -31,9 +37,12 @@ class ProjectsScreen extends StatelessWidget {
 
             // Section subtitle
             Center(
-              child: Text(
-                'My recent work',
+              child: AnimatedTextReveal(
+                text: 'My recent work',
                 style: Theme.of(context).textTheme.bodyLarge,
+                duration: const Duration(milliseconds: 800),
+                delay: const Duration(milliseconds: 400),
+                animationType: StaggeredTextAnimation.fadeIn,
               ),
             ),
 
@@ -66,7 +75,13 @@ class ProjectsScreen extends StatelessWidget {
       ),
       itemCount: sampleProjects.length,
       itemBuilder: (context, index) {
-        return _buildProjectCard(context, sampleProjects[index]);
+        // Add staggered animation to each card
+        return SlideRevealTransition(
+          duration: const Duration(milliseconds: 800),
+          delay: Duration(milliseconds: 600 + (index * 200)),
+          direction: SlideDirection.up,
+          child: _buildProjectCard(context, sampleProjects[index]),
+        );
       },
     );
   }
@@ -89,14 +104,18 @@ class ProjectsScreen extends StatelessWidget {
             // Project image
             Expanded(
               flex: 5,
-              child: Container(
-                width: double.infinity,
-                color: Colors.grey.shade300,
-                child: Center(
-                  child: Icon(
-                    Icons.code,
-                    size: 64,
-                    color: Theme.of(context).colorScheme.primary,
+              child: ParallaxEffect(
+                intensity: 15.0,
+                enableScrollEffect: true,
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.grey.shade300,
+                  child: Center(
+                    child: Icon(
+                      Icons.code,
+                      size: 64,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ),

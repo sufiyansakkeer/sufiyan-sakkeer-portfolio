@@ -7,6 +7,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
@@ -31,6 +33,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  firebase_core: ^2.4.1
+  cloud_firestore: ^4.3.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -77,6 +81,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/files/
+    - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

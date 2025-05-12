@@ -16,7 +16,7 @@ class Experience {
   });
 }
 
-enum ExperienceType { work, education, volunteer }
+enum ExperienceType { work, education, volunteer, publication }
 
 // Sample experiences data
 List<Experience> sampleExperiences = [
@@ -60,6 +60,6 @@ List<Experience> sampleExperiences = [
     description:
         'Published an article discussing the importance and implementation of SOLID principles in software development, with a focus on Flutter applications.',
     logoUrl: 'assets/images/linkedin.png',
-    type: ExperienceType.volunteer,
+    type: ExperienceType.publication,
   ),
 ];

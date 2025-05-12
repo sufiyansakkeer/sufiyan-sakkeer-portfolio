@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/config/routes.dart';
+import 'package:portfolio/config/design_system.dart';
 import 'package:portfolio/utils/constants.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/theme_switcher.dart';
@@ -19,21 +20,43 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions and orientation
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final isVerySmallScreen = width < 360;
+    final isMobile = Helpers.isMobile(context);
+
+    // Use responsive font size for app bar title
+    final titleStyle = Theme.of(context).textTheme.headlineMedium?.copyWith(
+      fontSize: DesignSystem.getResponsiveFontSize(
+        context,
+        Theme.of(context).textTheme.headlineMedium?.fontSize ?? 24.0,
+      ),
+    );
+
     return AppBar(
       title: Text(
-        AppConstants.name,
-        style: Theme.of(context).textTheme.headlineMedium,
+        isVerySmallScreen
+            ? 'Portfolio'
+            : AppConstants.name, // Use shorter title on very small screens
+        style: titleStyle,
+        overflow: TextOverflow.ellipsis, // Prevent text overflow
       ),
+      centerTitle: isMobile, // Center title on mobile for better appearance
+      elevation: 4.0, // Add elevation for better visual separation
       actions:
-          Helpers.isMobile(context)
+          isMobile
               ? [
                 const ThemeSwitcher(isCompact: true),
                 IconButton(
                   icon: const Icon(Icons.menu),
+                  tooltip: 'Menu', // Add tooltip for accessibility
                   onPressed: () {
                     _showDrawer(context);
                   },
                 ),
+                // Add padding at the end for better touch targets
+                const SizedBox(width: 4),
               ]
               : [
                 ..._buildNavItems(context),
@@ -102,38 +125,85 @@ class CustomNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final height = screenSize.height;
+    final isLandscape = width > height;
+    final isVerySmallScreen = width < 360;
+
+    // Use responsive font sizes
+    final nameStyle = Theme.of(context).textTheme.headlineMedium?.copyWith(
+      color: Colors.white,
+      fontSize: DesignSystem.getResponsiveFontSize(
+        context,
+        Theme.of(context).textTheme.headlineMedium?.fontSize ?? 24.0,
+      ),
+    );
+
+    final titleStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
+      color: Colors.white70,
+      fontSize: DesignSystem.getResponsiveFontSize(
+        context,
+        Theme.of(context).textTheme.bodyLarge?.fontSize ?? 16.0,
+      ),
+    );
+
+    // Adjust drawer header height for landscape mode
+    final drawerHeaderHeight = isLandscape ? 120.0 : 160.0;
+
     return Drawer(
-      child: Column(
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppConstants.name,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineMedium?.copyWith(color: Colors.white),
+      width:
+          isVerySmallScreen
+              ? width * 0.85
+              : null, // Adjust width for very small screens
+      child: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
+              height: drawerHeaderHeight,
+              child: DrawerHeader(
+                padding: EdgeInsets.symmetric(
+                  vertical: isLandscape ? 8.0 : 16.0,
+                  horizontal: 16.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        isVerySmallScreen ? 'Portfolio' : AppConstants.name,
+                        style: nameStyle,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        AppConstants.title,
+                        style: titleStyle,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppConstants.title,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-          ..._buildDrawerItems(context),
-          const Spacer(),
-          const Padding(padding: EdgeInsets.all(16.0), child: ThemeSwitcher()),
-        ],
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero, // Remove default padding
+                physics: const BouncingScrollPhysics(), // Smoother scrolling
+                children: _buildDrawerItems(context),
+              ),
+            ),
+            const Divider(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: ThemeSwitcher(),
+            ),
+          ],
+        ),
       ),
     );
   }

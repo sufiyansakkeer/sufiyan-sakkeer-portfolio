@@ -12,7 +12,7 @@ class ExperienceScreen extends StatefulWidget {
 class _ExperienceScreenState extends State<ExperienceScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<String> _tabs = ['All', 'Work', 'Education', 'Volunteer'];
+  final List<String> _tabs = ['All', 'Work', 'Education', 'Publications'];
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
                   _buildExperienceList(context, null),
                   _buildExperienceList(context, ExperienceType.work),
                   _buildExperienceList(context, ExperienceType.education),
-                  _buildExperienceList(context, ExperienceType.volunteer),
+                  _buildExperienceList(context, ExperienceType.publication),
                 ],
               ),
             ),
@@ -98,6 +98,8 @@ class _ExperienceScreenState extends State<ExperienceScreen>
     final filteredExperiences =
         type == null
             ? sampleExperiences
+                .where((exp) => exp.type != ExperienceType.volunteer)
+                .toList()
             : sampleExperiences.where((exp) => exp.type == type).toList();
 
     return ListView.builder(
@@ -204,6 +206,8 @@ class _ExperienceScreenState extends State<ExperienceScreen>
         return Icons.school;
       case ExperienceType.volunteer:
         return Icons.volunteer_activism;
+      case ExperienceType.publication:
+        return Icons.article;
     }
   }
 }

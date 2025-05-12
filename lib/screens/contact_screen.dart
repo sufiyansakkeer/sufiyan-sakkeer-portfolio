@@ -1,4 +1,8 @@
+import 'dart:developer' show log;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:portfolio/utils/constants.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/social_bar.dart';
@@ -448,32 +452,37 @@ class _ContactScreenState extends State<ContactScreen> {
       });
 
       try {
-        // Simulate API call
-        await Future.delayed(const Duration(seconds: 2));
-
-        // For a real implementation, you would use something like:
-        /*
-        final response = await http.post(
-          Uri.parse(AppConstants.contactFormEndpoint),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'name': _nameController.text,
-            'email': _emailController.text,
-            'subject': _subjectController.text,
-            'message': _messageController.text,
-          }),
+        // Get a reference to the Firestore collection
+        CollectionReference contacts = FirebaseFirestore.instance.collection(
+          'contacts',
         );
 
-        if (response.statusCode != 200) {
-          throw Exception('Failed to send message');
+        // Add a new document to the collection
+        var result = await contacts.add({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'subject': _subjectController.text,
+          'message': _messageController.text,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        if (kDebugMode) {
+          log(result.toString());
         }
-        */
-
         setState(() {
           _isSubmitting = false;
           _formSubmitted = true;
         });
+
+        // Show success snackbar
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Message sent successfully!')),
+          );
+        }
       } catch (e) {
+        if (kDebugMode) {
+          log('Error sending message: $e');
+        }
         setState(() {
           _isSubmitting = false;
           _errorMessage = 'Failed to send message. Please try again later.';
