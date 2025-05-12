@@ -144,6 +144,7 @@ class AboutScreen extends StatelessWidget {
             flex: 5,
             child: Stack(
               alignment: Alignment.center,
+              clipBehavior: Clip.none,
               children: [
                 // Background decorative elements
                 Positioned(
@@ -191,8 +192,10 @@ class AboutScreen extends StatelessWidget {
           // Profile image with floating skill tags
           SizedBox(
             height: 350,
+            width: double.infinity,
             child: Stack(
               alignment: Alignment.center,
+              clipBehavior: Clip.none,
               children: [
                 _buildProfileImage(context),
                 ..._buildFloatingSkillTags(context, isMobile: true),
@@ -219,31 +222,46 @@ class AboutScreen extends StatelessWidget {
             ? ['Flutter', 'Dart', 'Firebase']
             : ['Flutter', 'Dart', 'Firebase', 'UI/UX', 'Mobile'];
 
+    // Get the center point based on image size
+    final imageSize = Helpers.isMobile(context) ? 280.0 : 320.0;
+    final centerX = imageSize / 2;
+    final centerY = imageSize / 2;
+
+    // Calculate positions relative to the center of the profile image
+    // with better distribution and no overflow
     final positions =
         isMobile
             ? [
-              const Offset(-60, -40),
-              const Offset(80, -60),
-              const Offset(0, 80),
+              Offset(centerX - 100, centerY - 100), // Top left
+              Offset(centerX + 100, centerY - 100), // Top right
+              Offset(centerX, centerY + 120), // Bottom center
             ]
             : [
-              const Offset(-120, -80),
-              const Offset(140, -100),
-              const Offset(160, 100),
-              const Offset(-140, 120),
-              const Offset(0, 160),
+              Offset(centerX - 160, centerY - 120), // Top left
+              Offset(centerX + 160, centerY - 120), // Top right
+              Offset(centerX + 180, centerY + 100), // Bottom right
+              Offset(centerX - 180, centerY + 100), // Bottom left
+              Offset(centerX, centerY + 180), // Bottom center
             ];
 
     // Use a fixed seed for deterministic randomness
     return List.generate(skills.length, (index) {
+      // Apply parallax effect with different intensity for each tag
+      final tagParallaxIntensity = 10.0 + (index * 5.0);
+
       return Positioned(
-        left: positions[index].dx + 150,
-        top: positions[index].dy + 150,
-        child: AnimatedSkillTag(
-          skill: skills[index],
-          color: _getColorForIndex(index, context),
-          // Increase delay between animations for better performance
-          delay: Duration(milliseconds: 500 * index),
+        left: positions[index].dx,
+        top: positions[index].dy,
+        child: ParallaxEffect(
+          intensity: tagParallaxIntensity,
+          enableScrollEffect: true,
+          enableMouseTracking: !Helpers.isMobile(context),
+          child: AnimatedSkillTag(
+            skill: skills[index],
+            color: _getColorForIndex(index, context),
+            // Increase delay between animations for better performance
+            delay: Duration(milliseconds: 500 * index),
+          ),
         ),
       );
     });
@@ -314,17 +332,24 @@ class AboutScreen extends StatelessWidget {
 
   Widget _buildProfileImage(BuildContext context) {
     // Reduce parallax intensity on mobile for better performance
-    final parallaxIntensity = Helpers.isMobile(context) ? 20.0 : 40.0;
+    final parallaxIntensity = Helpers.isMobile(context) ? 15.0 : 30.0;
+    final imageSize = Helpers.isMobile(context) ? 280.0 : 320.0;
 
-    return RepaintBoundary(
-      // Add RepaintBoundary to isolate repainting
-      child: ParallaxEffect(
-        intensity: parallaxIntensity,
-        enableScrollEffect: true,
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 350),
-          child: AspectRatio(
-            aspectRatio: 1,
+    return Center(
+      child: RepaintBoundary(
+        // Add RepaintBoundary to isolate repainting
+        child: ParallaxEffect(
+          intensity: parallaxIntensity,
+          enableScrollEffect: true,
+          // Disable mouse tracking on mobile for better performance
+          enableMouseTracking: !Helpers.isMobile(context),
+          child: Container(
+            width: imageSize,
+            height: imageSize,
+            constraints: BoxConstraints(
+              maxWidth: imageSize,
+              maxHeight: imageSize,
+            ),
             child: SlideRevealTransition(
               duration: const Duration(milliseconds: 1000),
               delay: const Duration(milliseconds: 300),
@@ -494,17 +519,24 @@ class AboutScreen extends StatelessWidget {
 
           const SizedBox(height: DesignSystem.spacingLg),
 
-          // Action buttons with parallax effect
-          ParallaxEffect(
-            intensity: 20.0,
-            enableScrollEffect: true,
-            child: SlideRevealTransition(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 1000),
-              direction: SlideDirection.up,
-              child: Row(
-                children: [
-                  HoverEffect(
+          // Action buttons with individual parallax effects and responsive layout
+          SlideRevealTransition(
+            duration: const Duration(milliseconds: 800),
+            delay: const Duration(milliseconds: 1000),
+            direction: SlideDirection.up,
+            child: Wrap(
+              spacing: DesignSystem.spacingMd,
+              runSpacing: DesignSystem.spacingMd,
+              alignment:
+                  Helpers.isMobile(context)
+                      ? WrapAlignment.center
+                      : WrapAlignment.start,
+              children: [
+                // Download Resume button with its own parallax effect
+                ParallaxEffect(
+                  intensity: 25.0,
+                  enableScrollEffect: true,
+                  child: HoverEffect(
                     scale: 1.05,
                     enableElevation: true,
                     child: ElevatedButton.icon(
@@ -514,8 +546,11 @@ class AboutScreen extends StatelessWidget {
                       icon: const Icon(Icons.download),
                       label: const Text('Download Resume'),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: DesignSystem.spacingMd,
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              Helpers.isMobile(context)
+                                  ? DesignSystem.spacingSm
+                                  : DesignSystem.spacingMd,
                           vertical: DesignSystem.spacingSm,
                         ),
                         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -524,10 +559,13 @@ class AboutScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
 
-                  const SizedBox(width: DesignSystem.spacingMd),
-
-                  HoverEffect(
+                // Contact Me button with its own parallax effect
+                ParallaxEffect(
+                  intensity: 15.0,
+                  enableScrollEffect: true,
+                  child: HoverEffect(
                     scale: 1.05,
                     enableElevation: true,
                     child: OutlinedButton.icon(
@@ -544,8 +582,11 @@ class AboutScreen extends StatelessWidget {
                       icon: const Icon(Icons.email),
                       label: const Text('Contact Me'),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: DesignSystem.spacingMd,
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              Helpers.isMobile(context)
+                                  ? DesignSystem.spacingSm
+                                  : DesignSystem.spacingMd,
                           vertical: DesignSystem.spacingSm,
                         ),
                         side: BorderSide(
@@ -555,8 +596,8 @@ class AboutScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
 
