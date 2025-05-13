@@ -22,8 +22,9 @@ List<Project> sampleProjects = [
     title: 'avua - Applicant App',
     description:
         'Enables direct connection between applicants and recruiters, allowing the creation of AI-friendly profiles. Features include customizable resume templates, video resumes, and AI-generated scoring for an enhanced job application experience.',
-    imageUrl: 'assets/images/avua_applicant.jpg',
-    liveUrl: 'https://apps.apple.com/in/app/avua/id6469672021',
+    imageUrl:
+        'https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1974&auto=format&fit=crop',
+    liveUrl: 'https://play.google.com/store/apps/details?id=com.app.avua',
     githubUrl: null,
     technologies: [
       'Flutter',
@@ -39,7 +40,8 @@ List<Project> sampleProjects = [
     title: 'avua Recruiter',
     description:
         'Connects recruiters with applicants, enabling job postings and providing AI-based results. Key features include job management in the job space and \'avua Pool\' for finding applicants by name, keywords, skills and job titles.',
-    imageUrl: 'assets/images/avua_recruiter.jpg',
+    imageUrl:
+        'https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop',
     liveUrl: 'https://apps.apple.com/in/app/avua-recruiter/id6474672130',
     githubUrl: null,
     technologies: [
@@ -56,7 +58,8 @@ List<Project> sampleProjects = [
     title: 'Money Track',
     description:
         'A feature-rich personal finance management application developed using Flutter, designed to help users efficiently track their income and expenses, manage budgets, and visualize financial data.',
-    imageUrl: 'assets/images/money_track.jpg',
+    imageUrl:
+        'https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?q=80&w=2070&auto=format&fit=crop',
     liveUrl: null,
     githubUrl: 'https://github.com/sufiyansakkeer/Money-Tracker/',
     technologies: [
@@ -72,7 +75,8 @@ List<Project> sampleProjects = [
     title: 'BSocial',
     description:
         'BSocial is a cutting-edge social media app built with Flutter and Provider state management. Its sleek design ensures a seamless user experience. Features include news feeds, messaging, and profile customization.',
-    imageUrl: 'assets/images/bsocial.jpg',
+    imageUrl:
+        'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1974&auto=format&fit=crop',
     liveUrl: null,
     githubUrl: 'https://github.com/sufiyansakkeer/BSocial',
     technologies: [

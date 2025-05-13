@@ -11,6 +11,7 @@ import 'package:portfolio/screens/contact_screen.dart';
 import 'package:portfolio/widgets/custom_cursor.dart';
 import 'package:portfolio/widgets/animated_section_container.dart';
 import 'package:portfolio/widgets/simple_section_container.dart';
+import 'package:portfolio/widgets/lazy_load_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,7 +29,10 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_handleScroll);
+    // Delay adding the scroll listener to improve initial load performance
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.addListener(_handleScroll);
+    });
   }
 
   @override
@@ -157,39 +161,55 @@ class HomeScreenState extends State<HomeScreen> {
                 const ClampingScrollPhysics(), // Smoother scrolling on mobile
             child: Column(
               children: [
+                // About section is always loaded immediately
                 AboutScreen(key: _sectionKeys[0]),
-                SimpleSectionContainer(
-                  key: _sectionKeys[1],
-                  backgroundColor: sectionColors[1],
-                  child: const SkillsScreen(),
+
+                // Use RepaintBoundary to optimize rendering
+                RepaintBoundary(
+                  child: SimpleSectionContainer(
+                    key: _sectionKeys[1],
+                    backgroundColor: sectionColors[1],
+                    child: const SkillsScreen(),
+                  ),
                 ),
 
-                // Projects Section
-                AnimatedSectionContainer(
-                  key: _sectionKeys[2],
-                  isActive: _activeSection == 2,
-                  backgroundColor: sectionColors[2],
-                  revealColor: revealColors[2],
-                  enableParallax:
-                      false, // Disable parallax in landscape on mobile
-                  parallaxIntensity: projectsParallaxIntensity,
-                  animationDuration: const Duration(milliseconds: 800),
-                  animationCurve: Curves.easeInOutCubic,
-                  child: const ProjectsScreen(),
+                // Projects Section - Lazy load
+                LazyLoadSection(
+                  child: RepaintBoundary(
+                    child: AnimatedSectionContainer(
+                      key: _sectionKeys[2],
+                      isActive: _activeSection == 2,
+                      backgroundColor: sectionColors[2],
+                      revealColor: revealColors[2],
+                      enableParallax: false,
+                      parallaxIntensity: projectsParallaxIntensity,
+                      animationDuration: const Duration(milliseconds: 800),
+                      animationCurve: Curves.easeInOutCubic,
+                      child: const ProjectsScreen(),
+                    ),
+                  ),
                 ),
 
-                // Experience Section
-                SimpleSectionContainer(
-                  key: _sectionKeys[3],
-                  backgroundColor: sectionColors[3],
-                  child: const ExperienceScreen(),
+                // Experience Section - Lazy load
+                LazyLoadSection(
+                  child: RepaintBoundary(
+                    child: SimpleSectionContainer(
+                      key: _sectionKeys[3],
+                      backgroundColor: sectionColors[3],
+                      child: const ExperienceScreen(),
+                    ),
+                  ),
                 ),
 
-                // Contact Section
-                SimpleSectionContainer(
-                  key: _sectionKeys[4],
-                  backgroundColor: sectionColors[4],
-                  child: const ContactScreen(),
+                // Contact Section - Lazy load
+                LazyLoadSection(
+                  child: RepaintBoundary(
+                    child: SimpleSectionContainer(
+                      key: _sectionKeys[4],
+                      backgroundColor: sectionColors[4],
+                      child: const ContactScreen(),
+                    ),
+                  ),
                 ),
               ],
             ),

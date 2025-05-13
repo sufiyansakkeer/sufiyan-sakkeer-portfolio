@@ -1,5 +1,4 @@
 import 'dart:developer' show log;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +7,6 @@ import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/social_bar.dart';
 import 'package:portfolio/widgets/hover_effect.dart';
 import 'package:portfolio/config/design_system.dart';
-// These imports are used in the commented-out code for the real API implementation
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -263,7 +259,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 filled: true, // Add a subtle fill color
                 fillColor: Theme.of(
                   context,
-                ).colorScheme.onSurface.withOpacity(0.05),
+                ).colorScheme.onSurface.withAlpha(13), // 0.05 opacity (13/255)
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: DesignSystem.spacingSm,
                   horizontal: DesignSystem.spacingMd,
@@ -300,7 +296,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 filled: true,
                 fillColor: Theme.of(
                   context,
-                ).colorScheme.onSurface.withOpacity(0.05),
+                ).colorScheme.onSurface.withAlpha(13), // 0.05 opacity (13/255)
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: DesignSystem.spacingSm,
                   horizontal: DesignSystem.spacingMd,
@@ -341,7 +337,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 filled: true,
                 fillColor: Theme.of(
                   context,
-                ).colorScheme.onSurface.withOpacity(0.05),
+                ).colorScheme.onSurface.withAlpha(13), // 0.05 opacity (13/255)
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: DesignSystem.spacingSm,
                   horizontal: DesignSystem.spacingMd,
@@ -377,7 +373,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 filled: true,
                 fillColor: Theme.of(
                   context,
-                ).colorScheme.onSurface.withOpacity(0.05),
+                ).colorScheme.onSurface.withAlpha(13), // 0.05 opacity (13/255)
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: DesignSystem.spacingSm,
                   horizontal: DesignSystem.spacingMd,

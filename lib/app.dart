@@ -4,6 +4,7 @@ import 'package:portfolio/config/theme.dart';
 import 'package:portfolio/config/theme_provider.dart';
 import 'package:portfolio/config/routes.dart';
 import 'package:portfolio/utils/constants.dart';
+import 'package:portfolio/screens/home_screen.dart';
 
 class PortfolioApp extends StatelessWidget {
   const PortfolioApp({super.key});
@@ -20,7 +21,7 @@ class PortfolioApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            initialRoute: AppRoutes.home,
+            home: const HomeScreen(), // Load home screen directly
             onGenerateRoute: AppRoutes.generateRoute,
           );
         },

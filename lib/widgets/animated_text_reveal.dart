@@ -91,8 +91,9 @@ class _AnimatedTextRevealState extends State<AnimatedTextReveal>
   }
 
   void _animateTypewriter() {
-    if (!mounted || _isAnimatingTypewriter)
+    if (!mounted || _isAnimatingTypewriter) {
       return; // Prevent concurrent animations
+    }
 
     _isAnimatingTypewriter = true;
     _visibleTextNotifier.value = ''; // Reset visible text
