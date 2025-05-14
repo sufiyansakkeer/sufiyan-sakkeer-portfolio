@@ -9,7 +9,6 @@ import 'package:portfolio/screens/projects_screen.dart';
 import 'package:portfolio/screens/experience_screen.dart';
 import 'package:portfolio/screens/contact_screen.dart';
 import 'package:portfolio/widgets/custom_cursor.dart';
-import 'package:portfolio/widgets/animated_section_container.dart';
 import 'package:portfolio/widgets/simple_section_container.dart';
 import 'package:portfolio/widgets/lazy_load_section.dart';
 
@@ -118,18 +117,8 @@ class HomeScreenState extends State<HomeScreen> {
       Theme.of(context).colorScheme.surface,
     ];
 
-    // Define section reveal colors
-    final List<Color> revealColors = [
-      Theme.of(context).colorScheme.primary,
-      Theme.of(context).colorScheme.secondary,
-      Theme.of(context).colorScheme.tertiary,
-      Theme.of(context).colorScheme.primary.withAlpha(204), // 0.8 opacity
-      Theme.of(context).colorScheme.secondary.withAlpha(204), // 0.8 opacity
-    ];
-
     // Adjust parallax intensity based on device
     // final aboutParallaxIntensity = isMobile ? 15.0 : 30.0;
-    final projectsParallaxIntensity = isMobile ? 10.0 : 20.0;
 
     return CustomCursor(
       cursorColor: Theme.of(context).colorScheme.primary,
@@ -176,15 +165,9 @@ class HomeScreenState extends State<HomeScreen> {
                 // Projects Section - Lazy load
                 LazyLoadSection(
                   child: RepaintBoundary(
-                    child: AnimatedSectionContainer(
+                    child: SimpleSectionContainer(
                       key: _sectionKeys[2],
-                      isActive: _activeSection == 2,
                       backgroundColor: sectionColors[2],
-                      revealColor: revealColors[2],
-                      enableParallax: false,
-                      parallaxIntensity: projectsParallaxIntensity,
-                      animationDuration: const Duration(milliseconds: 800),
-                      animationCurve: Curves.easeInOutCubic,
                       child: const ProjectsScreen(),
                     ),
                   ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/page_reveal_transition.dart';
 import 'package:portfolio/widgets/parallax_effect.dart';
+import 'package:portfolio/utils/animation_state_manager.dart';
 import 'package:visibility_detector/visibility_detector.dart'; // Import the package
+import 'package:portfolio/screens/projects_screen.dart';
 
 class AnimatedSectionContainer extends StatefulWidget {
   final Widget child;
@@ -14,6 +16,7 @@ class AnimatedSectionContainer extends StatefulWidget {
   final Duration animationDuration;
   final Curve animationCurve;
   final EdgeInsetsGeometry? padding;
+  final String? animationKey;
 
   const AnimatedSectionContainer({
     super.key,
@@ -26,6 +29,7 @@ class AnimatedSectionContainer extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 800),
     this.animationCurve = Curves.easeInOutCubic,
     this.padding,
+    this.animationKey,
   });
 
   @override
@@ -38,7 +42,7 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   bool _isVisible = false;
-  // final GlobalKey _sectionKey = GlobalKey(); // No longer needed
+  bool _hasRevealedOnce = false;
 
   // Key for VisibilityDetector
   final Key _visibilityKey = UniqueKey();
@@ -60,11 +64,6 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
       _controller.value = 1.0;
       _isVisible = true;
     }
-
-    // No need for initial check with VisibilityDetector
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _checkVisibility();
-    // });
   }
 
   @override
@@ -85,8 +84,6 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
     super.dispose();
   }
 
-  // void _checkVisibility() { ... } // Remove this method
-
   void _handleVisibilityChange(VisibilityInfo info) {
     // Use visibleFraction to determine visibility (e.g., > 0.1 means at least 10% visible)
     final bool isNowVisible = info.visibleFraction > 0.1 || widget.isActive;
@@ -94,6 +91,9 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
     if (isNowVisible != _isVisible) {
       setState(() {
         _isVisible = isNowVisible;
+        if (isNowVisible && !_hasRevealedOnce) {
+          _hasRevealedOnce = true;
+        }
       });
 
       if (isNowVisible) {
@@ -128,7 +128,6 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
     minHeight -= (safeAreaPadding.top + safeAreaPadding.bottom);
 
     final content = Container(
-      // key: _sectionKey, // No longer needed here
       width: double.infinity,
       constraints: BoxConstraints(minHeight: minHeight),
       padding: widget.padding ?? Helpers.getResponsivePadding(context),
@@ -157,6 +156,22 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
       ),
     );
 
+    // Check if we should reveal based on animation state
+    bool shouldReveal = _isVisible;
+
+    // If there's an animation key, check if it has already played
+    if (widget.animationKey != null) {
+      shouldReveal =
+          _isVisible &&
+          !animationStateManager.hasAnimationPlayed(widget.animationKey!);
+
+      // If this is becoming visible and the animation hasn't played, mark it as played
+      if (_isVisible &&
+          !animationStateManager.hasAnimationPlayed(widget.animationKey!)) {
+        // Mark as played once the animation starts
+        animationStateManager.markAnimationPlayed(widget.animationKey!);
+      }
+    }
     // Wrap the animated content with VisibilityDetector
     return VisibilityDetector(
       key: _visibilityKey, // Use the unique key
@@ -164,29 +179,21 @@ class _AnimatedSectionContainerState extends State<AnimatedSectionContainer>
       child: AnimatedBuilder(
         animation: _fadeAnimation,
         builder: (context, child) {
-          // The logic inside AnimatedBuilder remains similar,
-          // but driven by _isVisible state updated by VisibilityDetector
           if (_isVisible) {
-            // Check _isVisible state directly
             return Opacity(
               opacity: _fadeAnimation.value,
               child: PageRevealTransition(
-                isRevealing: true, // Keep revealing logic based on state
+                isRevealing: shouldReveal,
                 duration: widget.animationDuration,
                 curve: widget.animationCurve,
                 revealColor: widget.revealColor,
-                child: content, // Pass the original content
+                child: content,
               ),
             );
           } else {
-            // When not visible, just show the content with opacity animation
-            // Ensure content is still part of the tree for VisibilityDetector
             return Opacity(opacity: _fadeAnimation.value, child: content);
           }
         },
-        // Pass the content as the child to AnimatedBuilder if needed,
-        // though it's directly used within the builder here.
-        // child: content,
       ),
     );
   }
@@ -202,6 +209,7 @@ class AnimatedSectionStack extends StatefulWidget {
   final Duration animationDuration;
   final Curve animationCurve;
   final EdgeInsetsGeometry? padding;
+  final List<String>? animationKeys;
 
   const AnimatedSectionStack({
     super.key,
@@ -214,6 +222,7 @@ class AnimatedSectionStack extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 800),
     this.animationCurve = Curves.easeInOutCubic,
     this.padding,
+    this.animationKeys,
   });
 
   @override
@@ -241,6 +250,11 @@ class _AnimatedSectionStackState extends State<AnimatedSectionStack> {
           animationDuration: widget.animationDuration,
           animationCurve: widget.animationCurve,
           padding: widget.padding,
+          animationKey:
+              widget.animationKeys != null &&
+                      widget.animationKeys!.length > index
+                  ? widget.animationKeys![index]
+                  : null,
           child: widget.children[index],
         );
       }),
