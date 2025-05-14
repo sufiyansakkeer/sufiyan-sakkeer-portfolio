@@ -206,8 +206,41 @@
       // The value below is injected by flutter build, do not touch.
       var serviceWorkerVersion = "{{flutter_service_worker_version}}";
     </script>
+
+    <!-- Firebase SDK scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase configuration script -->
+    <script>
+      // Initialize Firebase with your web app's Firebase configuration
+      document.addEventListener("DOMContentLoaded", function () {
+        const firebaseConfig = {
+          apiKey: "AIzaSyDpZwHG4wVOUyfHXWiojDOeT6KSKMH_pbo",
+          authDomain: "sufiyan-sakkeer.firebaseapp.com",
+          projectId: "sufiyan-sakkeer",
+          storageBucket: "sufiyan-sakkeer.firebasestorage.app",
+          messagingSenderId: "804519308110",
+          appId: "1:804519308110:web:705691bcac451c7d088c1f",
+          measurementId: "G-5MDGCEN4TZ",
+        };
+
+        try {
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+          console.log("Firebase initialized successfully");
+          window.firebaseInitialized = true;
+        } catch (error) {
+          console.error("Error initializing Firebase:", error);
+          window.firebaseInitialized = false;
+        }
+      });
+    </script>
+
     <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js"></script>
+    <script src="flutter.js" defer></script>
+    <!-- Our custom Flutter initialization script -->
+    <script src="main.js" defer></script>
   </head>
   <body>
     <!-- Initial loading animation -->
@@ -226,82 +259,6 @@
       </div>
     </div>
 
-    <script>
-      window.addEventListener("load", function () {
-        // Disable Flutter's default loading indicator
-        window.flutterWebRenderer = "canvaskit"; // Use CanvasKit renderer for better performance
-
-        // Create a function to hide our custom loading animation
-        function hideLoadingAnimation() {
-          document.getElementById("loading").style.opacity = "0";
-          setTimeout(function () {
-            document.getElementById("loading").style.display = "none";
-          }, 300);
-        }
-
-        // Create a script loader that uses the Flutter buildMode
-        const flutterLoader = {
-          loadEntrypoint: function (options) {
-            // This is a simple loader to load the main.dart.js file
-            const scriptTag = document.createElement("script");
-            scriptTag.src = "main.dart.js";
-            scriptTag.type = "application/javascript";
-            document.body.appendChild(scriptTag);
-
-            // We'll keep our custom loading animation until the app signals it's ready
-            // The app will call window.hideLoadingScreen() when it's ready
-            window.hideLoadingScreen = hideLoadingAnimation;
-          },
-        };
-
-        // Try to initialize Flutter
-        try {
-          // If flutter.js provides a proper loader, use it
-          if (window.flutter) {
-            // Configure Flutter to use our custom loading indicator
-            window._flutter = window._flutter || {};
-            window._flutter.loader = window._flutter.loader || {};
-            window._flutter.loader.didCreateEngineInitializer = function () {
-              // This prevents Flutter from showing its own loading indicator
-              return true;
-            };
-
-            // Create config for the engine initializer
-            const config = {
-              serviceWorker: {
-                serviceWorkerVersion: serviceWorkerVersion,
-              },
-              renderer: "canvaskit", // Use CanvasKit renderer for better performance
-            };
-
-            // Initialize Flutter engine
-            window.flutter.loader.loadEntrypoint({
-              onEntrypointLoaded: function (engineInitializer) {
-                // Initialize the engine with our config
-                engineInitializer
-                  .initializeEngine(config)
-                  .then(function (appRunner) {
-                    // Make the hideLoadingScreen function available to the Flutter app
-                    window.hideLoadingScreen = hideLoadingAnimation;
-
-                    // Run the app - our custom loading animation will remain visible
-                    // until the app calls window.hideLoadingScreen()
-                    appRunner.runApp();
-                  });
-              },
-            });
-          } else {
-            // Fallback to our simple loader if flutter.js doesn't behave as expected
-            console.log("Using fallback Flutter loader");
-            flutterLoader.loadEntrypoint({});
-          }
-        } catch (e) {
-          console.error("Error during Flutter initialization:", e);
-          // Fallback to our simple loader
-          console.log("Using fallback Flutter loader after error");
-          flutterLoader.loadEntrypoint({});
-        }
-      });
-    </script>
+    <!-- Flutter initialization is now handled by flutter_bootstrap.js -->
   </body>
 </html>

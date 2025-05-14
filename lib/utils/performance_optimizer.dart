@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:portfolio/utils/image_cache_manager.dart';
 import 'package:portfolio/models/project.dart';
+import 'package:portfolio/models/skill.dart';
+import 'package:portfolio/models/experience.dart';
 
 /// A utility class for optimizing app performance
 class PerformanceOptimizer {
-  static final PerformanceOptimizer _instance = PerformanceOptimizer._internal();
-  
+  static final PerformanceOptimizer _instance =
+      PerformanceOptimizer._internal();
+
   factory PerformanceOptimizer() => _instance;
-  
+
   PerformanceOptimizer._internal();
 
   // Track if preloading has been done
@@ -20,19 +23,33 @@ class PerformanceOptimizer {
 
     // Preload project images
     final imagesToPreload = <String>[];
-    
+
     // Add project images that are URLs (not asset paths)
     for (final project in sampleProjects) {
       if (!project.imageUrl.startsWith('assets/')) {
         imagesToPreload.add(project.imageUrl);
       }
     }
-    
+
+    // Add skill icons that are network images
+    for (final skill in sampleSkills) {
+      if (skill.isNetworkImage) {
+        imagesToPreload.add(skill.iconPath);
+      }
+    }
+
+    // Add experience logos that are network images
+    for (final experience in sampleExperiences) {
+      if (experience.logoUrl != null && experience.isNetworkImage) {
+        imagesToPreload.add(experience.logoUrl!);
+      }
+    }
+
     // Preload network images
     if (imagesToPreload.isNotEmpty) {
       await AppImageCacheManager().preloadImages(imagesToPreload);
     }
-    
+
     _hasPreloadedAssets = true;
   }
 
@@ -57,9 +74,7 @@ class OptimizedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return useRepaintBoundary
-        ? RepaintBoundary(child: child)
-        : child;
+    return useRepaintBoundary ? RepaintBoundary(child: child) : child;
   }
 }
 

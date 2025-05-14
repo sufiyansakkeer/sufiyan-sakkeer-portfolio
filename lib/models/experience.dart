@@ -5,6 +5,7 @@ class Experience {
   final String description;
   final String? logoUrl;
   final ExperienceType type;
+  final bool isNetworkImage;
 
   Experience({
     required this.title,
@@ -13,6 +14,7 @@ class Experience {
     required this.description,
     this.logoUrl,
     required this.type,
+    this.isNetworkImage = false,
   });
 }
 
@@ -27,8 +29,10 @@ List<Experience> sampleExperiences = [
     period: 'July 2023 - Present',
     description:
         'Led the design and development of scalable and reliable cross-platform mobile applications using Flutter. Effectively collaborated with the back-end team to streamline integration, ensuring the successful delivery of two top-notch applications. Spearheaded the creation of a robust architecture, resulting in a 35% improvement in application performance. Reduced time-to-market by 30% through efficient development practices and streamlined processes.',
-    logoUrl: 'assets/images/avua.png',
+    logoUrl:
+        'https://media.licdn.com/dms/image/C4D0BAQGfBCXZ_Kw_Ug/company-logo_200_200/0/1677566365962?e=1720051200&v=beta&t=Yd-Ij-Oe-Yd-Ij-Oe-Yd-Ij-Oe',
     type: ExperienceType.work,
+    isNetworkImage: true,
   ),
 
   // Education
@@ -38,8 +42,10 @@ List<Experience> sampleExperiences = [
     period: 'October 2022 - July 2023',
     description:
         'Intensive training program focused on Flutter development. Worked on real-world projects and gained hands-on experience with Flutter framework, state management solutions, and backend integration.',
-    logoUrl: 'assets/images/brototype.png',
+    logoUrl:
+        'https://media.licdn.com/dms/image/C560BAQFAVLoL6j71Kg/company-logo_200_200/0/1657630844148?e=1720051200&v=beta&t=KSh-LGxaFTyZVJF8Z7KZ8YZJJgH8Z7KZ8YZJJgH8',
     type: ExperienceType.education,
+    isNetworkImage: true,
   ),
   Experience(
     title: 'Bachelor of Computer Application',
@@ -47,8 +53,10 @@ List<Experience> sampleExperiences = [
     period: '2019 - 2022',
     description:
         'Completed Bachelor\'s degree in Computer Application with focus on programming fundamentals, data structures, and software development.',
-    logoUrl: 'assets/images/bgs.png',
+    logoUrl:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUJjQlhHhUXR-v7QlLv_RuO9MeVEGRn74Uw&usqp=CAU',
     type: ExperienceType.education,
+    isNetworkImage: true,
   ),
 
   // Publications
@@ -59,7 +67,8 @@ List<Experience> sampleExperiences = [
     period: '2024',
     description:
         'Published an article discussing the importance and implementation of SOLID principles in software development, with a focus on Flutter applications.',
-    logoUrl: 'assets/images/linkedin.png',
+    logoUrl: 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
     type: ExperienceType.publication,
+    isNetworkImage: true,
   ),
 ];

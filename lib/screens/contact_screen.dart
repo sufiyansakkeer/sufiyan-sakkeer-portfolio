@@ -2,11 +2,15 @@ import 'dart:developer' show log;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:portfolio/utils/constants.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/widgets/social_bar.dart';
 import 'package:portfolio/widgets/hover_effect.dart';
 import 'package:portfolio/config/design_system.dart';
+
+// Import the global Firebase initialization status
+import 'package:portfolio/main.dart' show isFirebaseInitialized;
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -558,6 +562,22 @@ class _ContactScreenState extends State<ContactScreen> {
       });
 
       try {
+        // Check if Firebase is initialized before using Firestore
+        if (!isFirebaseInitialized) {
+          // Try to initialize Firebase if it's not already initialized
+          try {
+            await Firebase.initializeApp();
+            if (kDebugMode) {
+              log('Firebase initialized in contact form submission');
+            }
+          } catch (firebaseError) {
+            if (kDebugMode) {
+              log('Failed to initialize Firebase: $firebaseError');
+            }
+            throw Exception('Firebase is not initialized');
+          }
+        }
+
         // Get a reference to the Firestore collection
         CollectionReference contacts = FirebaseFirestore.instance.collection(
           'contacts',
@@ -571,9 +591,11 @@ class _ContactScreenState extends State<ContactScreen> {
           'message': _messageController.text,
           'timestamp': FieldValue.serverTimestamp(),
         });
+
         if (kDebugMode) {
-          log(result.toString());
+          log('Message sent successfully: ${result.id}');
         }
+
         setState(() {
           _isSubmitting = false;
           _formSubmitted = true;

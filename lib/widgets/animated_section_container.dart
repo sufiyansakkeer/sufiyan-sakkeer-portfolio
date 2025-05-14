@@ -4,7 +4,6 @@ import 'package:portfolio/widgets/page_reveal_transition.dart';
 import 'package:portfolio/widgets/parallax_effect.dart';
 import 'package:portfolio/utils/animation_state_manager.dart';
 import 'package:visibility_detector/visibility_detector.dart'; // Import the package
-import 'package:portfolio/screens/projects_screen.dart';
 
 class AnimatedSectionContainer extends StatefulWidget {
   final Widget child;

@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// A utility class to manage animation states across the app
 class AnimationStateManager {
   // Private constructor for singleton

@@ -104,8 +104,6 @@ class HomeScreenState extends State<HomeScreen> {
     // Get screen dimensions and orientation
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
-    // final height = screenSize.height;
-    // final isLandscape = width > height;
     final isMobile = Helpers.isMobile(context);
 
     // Define section background colors
@@ -116,9 +114,6 @@ class HomeScreenState extends State<HomeScreen> {
       Theme.of(context).colorScheme.surface.withAlpha(247), // 0.97 opacity
       Theme.of(context).colorScheme.surface,
     ];
-
-    // Adjust parallax intensity based on device
-    // final aboutParallaxIntensity = isMobile ? 15.0 : 30.0;
 
     return CustomCursor(
       cursorColor: Theme.of(context).colorScheme.primary,
@@ -208,11 +203,8 @@ class HomeScreenState extends State<HomeScreen> {
               isMobile && width < 400, // Use smaller FAB on very small screens
           child: const Icon(Icons.arrow_upward),
         ),
-        // Adjust FAB position for better accessibility on mobile
-        floatingActionButtonLocation:
-            isMobile
-                ? FloatingActionButtonLocation.endFloat
-                : FloatingActionButtonLocation.endFloat,
+        // Position FAB at the end float position
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
