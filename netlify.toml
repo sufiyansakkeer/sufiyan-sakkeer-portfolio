@@ -1,0 +1,9 @@
+# netlify.toml
+[build]
+  publish = "build/web"
+  
+# Redirects for single page applications
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

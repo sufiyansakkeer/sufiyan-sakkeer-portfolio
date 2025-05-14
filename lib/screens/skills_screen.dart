@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/models/skill.dart';
 import 'package:portfolio/utils/helpers.dart';
 import 'package:portfolio/config/design_system.dart';
+import 'package:portfolio/utils/animation_utilities.dart';
+import 'package:portfolio/widgets/section_header.dart';
+import 'package:portfolio/widgets/styled_card.dart';
 
 class SkillsScreen extends StatelessWidget {
   const SkillsScreen({super.key});
@@ -12,31 +15,18 @@ class SkillsScreen extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return Padding(
-      padding: DesignSystem.getSectionPadding(context),
+    return SectionContainer(
+      animationKey: 'skills-section',
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Section title
-            Center(
-              child: Text(
-                'Skills & Technologies',
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
+            // Section header with consistent styling
+            SectionHeader(
+              title: 'Skills & Technologies',
+              subtitle: 'My technical level',
+              animationKey: 'skills',
             ),
-
-            SizedBox(height: DesignSystem.spacingSm),
-
-            // Section subtitle
-            Center(
-              child: Text(
-                'My technical level',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-
-            SizedBox(height: DesignSystem.spacingXl),
 
             // Skills categories
             _buildSkillCategories(context),
@@ -105,29 +95,54 @@ class SkillsScreen extends StatelessWidget {
     SkillCategory category,
     List<Skill> skills,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: DesignSystem.spacingLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Category title
-          Text(
-            _getCategoryTitle(category),
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+    final categoryKey = category.toString().split('.').last;
 
-          SizedBox(height: DesignSystem.spacingSm),
+    return AnimationUtilities.createVisibilityTriggeredAnimation(
+      animationKey: 'skill-category-$categoryKey',
+      slideOffset: const Offset(0, 0.1),
+      child: StyledCard(
+        padding: const EdgeInsets.all(DesignSystem.spacingMd),
+        enableHover: false,
+        useGlassEffect: true,
+        glassOpacity: 0.5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Category title
+            Text(
+              _getCategoryTitle(category),
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
 
-          // Skills list
-          ...skills.map((skill) => _buildSkillItem(context, skill)),
-        ],
+            const SizedBox(height: DesignSystem.spacingSm),
+
+            // Divider for visual separation
+            Divider(
+              color: Theme.of(context).colorScheme.primary.withAlpha(51),
+              thickness: 1,
+            ),
+
+            const SizedBox(height: DesignSystem.spacingSm),
+
+            // Skills list with staggered animations
+            ...AnimationUtilities.createStaggeredAnimations(
+              children:
+                  skills
+                      .map((skill) => _buildSkillItem(context, skill))
+                      .toList(),
+              baseAnimationKey: 'skill-item-$categoryKey',
+              staggerDelay: DesignSystem.delayShort,
+              slideOffset: const Offset(0.1, 0),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildSkillItem(BuildContext context, Skill skill) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: DesignSystem.spacingSm),
+      padding: const EdgeInsets.only(bottom: DesignSystem.spacingMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -135,27 +150,52 @@ class SkillsScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(skill.name, style: Theme.of(context).textTheme.bodyLarge),
               Text(
-                '${(skill.proficiency * 100).toInt()}%',
-                style: Theme.of(context).textTheme.bodyMedium,
+                skill.name,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: DesignSystem.spacingXs,
+                  vertical: DesignSystem.spacingXxs,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(DesignSystem.radiusXs),
+                ),
+                child: Text(
+                  '${(skill.proficiency * 100).toInt()}%',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
 
-          SizedBox(height: DesignSystem.spacingXs),
+          const SizedBox(height: DesignSystem.spacingXs),
 
-          // Progress bar
-          LinearProgressIndicator(
-            value: skill.proficiency,
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary.withAlpha(51),
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Theme.of(context).colorScheme.primary,
-            ),
-            minHeight: 8,
-            borderRadius: BorderRadius.circular(4),
+          // Progress bar with animation
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0.0, end: skill.proficiency),
+            duration: DesignSystem.durationSlow,
+            curve: DesignSystem.curveSmooth,
+            builder: (context, value, _) {
+              return LinearProgressIndicator(
+                value: value,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withAlpha(26),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.primary,
+                ),
+                minHeight: 8,
+                borderRadius: BorderRadius.circular(DesignSystem.radiusXs),
+              );
+            },
           ),
         ],
       ),
