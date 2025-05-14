@@ -1,13 +1,72 @@
 // Flutter web initialization script
 window.addEventListener("load", function () {
+  // Safe message handling implementation
+  try {
+    // Setup safe message handling functions
+    const messageTimeouts = {};
+
+    // Safe message sender function
+    window.sendSafeMessage = function (
+      target,
+      message,
+      responseCallback,
+      timeoutMs = 5000
+    ) {
+      const messageId = Date.now().toString() + Math.random().toString();
+
+      // Set timeout to handle message port closure
+      messageTimeouts[messageId] = setTimeout(() => {
+        delete messageTimeouts[messageId];
+        // Call callback with null to indicate timeout
+        if (responseCallback) {
+          responseCallback(null);
+        }
+      }, timeoutMs);
+
+      try {
+        // Wrap actual message sending in try-catch
+        if (target && typeof target.postMessage === "function") {
+          target.postMessage({ ...message, messageId }, "*");
+        }
+      } catch (msgError) {
+        console.log("Handled message sending error:", msgError);
+        clearTimeout(messageTimeouts[messageId]);
+        delete messageTimeouts[messageId];
+        if (responseCallback) {
+          responseCallback(null);
+        }
+      }
+    };
+
+    // Handle incoming messages safely
+    window.handleSafeMessage = function (event, handler) {
+      try {
+        if (handler && typeof handler === "function") {
+          handler(event.data);
+        }
+      } catch (handlerError) {
+        console.log("Handled message processing error:", handlerError);
+      }
+    };
+  } catch (error) {
+    console.log("Error setting up message handlers:", error);
+  }
   // Create a function to hide our custom loading animation
   function hideLoadingAnimation() {
-    const loadingElement = document.getElementById("loading");
-    if (loadingElement) {
-      loadingElement.style.opacity = "0";
-      setTimeout(function () {
-        loadingElement.style.display = "none";
-      }, 300);
+    try {
+      const loadingElement = document.getElementById("loading");
+      if (loadingElement) {
+        loadingElement.style.opacity = "0";
+        setTimeout(function () {
+          try {
+            loadingElement.style.display = "none";
+          } catch (e) {
+            console.log("Error hiding loading element:", e);
+          }
+        }, 300);
+      }
+    } catch (e) {
+      console.log("Error in hideLoadingAnimation:", e);
     }
   }
 
@@ -42,6 +101,21 @@ window.addEventListener("load", function () {
           // Make the hideLoadingScreen function available to the Flutter app
           window.hideLoadingScreen = hideLoadingAnimation;
 
+          // Setup error handler for runtime.lastError
+          const originalGetError = chrome.runtime && chrome.runtime.lastError;
+          if (chrome.runtime) {
+            Object.defineProperty(chrome.runtime, "lastError", {
+              get: function () {
+                try {
+                  return originalGetError;
+                } catch (e) {
+                  console.log("Safely handled runtime.lastError access");
+                  return { message: "Error was prevented" };
+                }
+              },
+            });
+          }
+
           // Run the app - our custom loading animation will remain visible
           // until the app calls window.hideLoadingScreen()
           await appRunner.runApp();
@@ -63,9 +137,36 @@ window.addEventListener("load", function () {
       const scriptTag = document.createElement("script");
       scriptTag.src = "main.dart.js";
       scriptTag.type = "application/javascript";
+
+      // Add error handling for script loading
+      scriptTag.onerror = function (error) {
+        console.error("Script loading failed:", error);
+        // Show user-friendly error message if needed
+        const errorElement = document.createElement("div");
+        errorElement.style.position = "fixed";
+        errorElement.style.top = "50%";
+        errorElement.style.left = "50%";
+        errorElement.style.transform = "translate(-50%, -50%)";
+        errorElement.style.padding = "20px";
+        errorElement.style.backgroundColor = "rgba(255,0,0,0.1)";
+        errorElement.style.border = "1px solid red";
+        errorElement.style.borderRadius = "5px";
+        errorElement.textContent =
+          "Application failed to load. Please try refreshing the page.";
+        document.body.appendChild(errorElement);
+      };
+
       document.body.appendChild(scriptTag);
     } catch (fallbackError) {
       console.error("Fallback initialization failed:", fallbackError);
     }
   }
+
+  // Global error handler for uncaught exceptions
+  window.addEventListener("error", function (event) {
+    console.log("Global error caught:", event.error);
+    // Prevent the error from bubbling up
+    event.preventDefault();
+    return true;
+  });
 });

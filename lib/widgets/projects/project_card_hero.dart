@@ -313,6 +313,8 @@ class ProjectCardHero extends StatelessWidget {
               padding: const EdgeInsets.all(DesignSystem.spacingMd),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // Set mainAxisSize to min to prevent the column from expanding beyond its content
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Title
                   Text(
@@ -339,30 +341,36 @@ class ProjectCardHero extends StatelessWidget {
                   const SizedBox(height: DesignSystem.spacingSm),
 
                   // Technologies - limited to first 4 in grid view
-                  Wrap(
-                    spacing: DesignSystem.spacingXs,
-                    runSpacing: DesignSystem.spacingXs,
-                    children:
-                        project.technologies.take(4).map((tech) {
-                          return Chip(
-                            label: Text(
-                              tech,
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                  // Wrap the Wrap widget with Flexible to allow it to shrink if needed
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Wrap(
+                      spacing: DesignSystem.spacingXs,
+                      runSpacing: DesignSystem.spacingXs,
+                      children:
+                          project.technologies.take(4).map((tech) {
+                            return Chip(
+                              label: Text(
+                                tech,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
                               ),
-                            ),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            padding: EdgeInsets.zero,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity.compact,
-                          );
-                        }).toList(),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              padding: EdgeInsets.zero,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity.compact,
+                            );
+                          }).toList(),
+                    ),
                   ),
 
-                  const Spacer(),
+                  // Use a smaller spacer to reduce the space between technologies and action buttons
+                  const SizedBox(height: DesignSystem.spacingSm),
 
                   // Action buttons
                   Row(

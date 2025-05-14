@@ -22,6 +22,8 @@ class AppConstants {
 
   // Resume
   static const String resumeFileName = 'sufiyan_sakkeer_resume.pdf';
+  static const String resumeUrl =
+      'https://drive.google.com/file/d/1FyMehryJueYg9_V2zhWNBtva_tlNOj6s/view?usp=sharing';
 
   // Contact Form
   static const String contactFormEndpoint =

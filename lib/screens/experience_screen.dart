@@ -48,7 +48,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
               animationKey: 'experience',
             ),
 
-            const SizedBox(height: DesignSystem.spacingLg),
+            const SizedBox(height: DesignSystem.spacingMd),
 
             // Modern styled tab bar
             AnimationUtilities.createVisibilityTriggeredAnimation(
@@ -75,7 +75,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
                             (tab) => Tab(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: DesignSystem.spacingXs,
+                                  vertical: DesignSystem.spacingXxs,
                                 ),
                                 child: Text(tab),
                               ),
@@ -108,7 +108,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
               child: SizedBox(
                 height:
                     MediaQuery.of(context).size.height *
-                    0.6, // Responsive height
+                    0.7, // Responsive height
                 child: TabBarView(
                   controller: _tabController,
                   children: [
@@ -229,8 +229,15 @@ class _ExperienceScreenState extends State<ExperienceScreen>
 
                     const SizedBox(height: DesignSystem.spacingXs),
 
-                    // Organization with badge
-                    Row(
+                    // Organization with badge - Wrap in a flexible layout for mobile
+                    Wrap(
+                      spacing:
+                          DesignSystem
+                              .spacingXs, // Horizontal spacing between items
+                      runSpacing:
+                          DesignSystem
+                              .spacingXs, // Vertical spacing between lines
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -253,7 +260,6 @@ class _ExperienceScreenState extends State<ExperienceScreen>
                             ),
                           ),
                         ),
-                        const SizedBox(width: DesignSystem.spacingXs),
                         Text(
                           experience.period,
                           style: Theme.of(context).textTheme.bodyMedium

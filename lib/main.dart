@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:js' as js;
 import 'app.dart';
 import 'firebase_options.dart';
 import 'package:portfolio/utils/performance_optimizer.dart';
+import 'package:portfolio/utils/web_platform_utils.dart';
 
 // Global variable to track Firebase initialization status
 bool isFirebaseInitialized = false;
@@ -20,6 +20,11 @@ void main() async {
 
   // Optimize performance
   PerformanceOptimizer().optimizeFrameRate();
+
+  // Initialize web platform error handling
+  if (kIsWeb) {
+    WebPlatformUtils.initializeErrorHandling();
+  }
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -47,22 +52,18 @@ Future<void> initializeFirebase() async {
   try {
     // For web platform, check if Firebase was already initialized by the web script
     if (kIsWeb) {
-      try {
-        // Check if Firebase is already initialized in JavaScript
-        if (js.context.hasProperty('firebaseInitialized') &&
-            js.context['firebaseInitialized'] == true) {
-          debugPrint('Firebase already initialized by web script');
-          isFirebaseInitialized = true;
-          return;
-        } else {
-          debugPrint(
-            'Firebase not initialized by web script, initializing from Dart',
-          );
-        }
-      } catch (e) {
-        debugPrint('Error checking web Firebase initialization: $e');
-        // Continue with normal initialization
+      final bool isInitializedInJS =
+          WebPlatformUtils.isFirebaseInitializedInJS();
+
+      if (isInitializedInJS) {
+        debugPrint('Firebase already initialized by web script');
+        isFirebaseInitialized = true;
+        return;
       }
+
+      debugPrint(
+        'Firebase not initialized by web script, initializing from Dart',
+      );
     }
 
     // Initialize Firebase with platform-specific options

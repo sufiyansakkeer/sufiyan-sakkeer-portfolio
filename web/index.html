@@ -32,10 +32,23 @@
     />
     <!-- Add the mobile-web-app-capable meta tag -->
     <meta name="mobile-web-app-capable" content="yes" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="favicon/favicon-96x96.png"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="favicon/apple-touch-icon.png"
+    />
+    <meta name="msapplication-TileColor" content="#2563EB" />
+    <meta name="theme-color" content="#2563EB" />
 
     <title>Sufiyan Sakkeer - Portfolio</title>
     <link rel="manifest" href="manifest.json" />
@@ -207,6 +220,45 @@
       var serviceWorkerVersion = "{{flutter_service_worker_version}}";
     </script>
 
+    <!-- LaunchDarkly fallback mechanism -->
+    <script>
+      // Create a fallback for LaunchDarkly if it's blocked or fails
+      window.launchDarklyFallback = {
+        initialized: false,
+        variation: function (key, defaultValue) {
+          console.log("LaunchDarkly fallback used for feature flag:", key);
+          return defaultValue;
+        },
+        identify: function () {
+          console.log("LaunchDarkly fallback identify called");
+          return Promise.resolve();
+        },
+        on: function () {
+          // No-op event listener
+          return { off: function () {} };
+        },
+      };
+
+      // Error handler for LaunchDarkly loading
+      window.handleLDError = function () {
+        console.log("LaunchDarkly service unavailable, using fallback");
+        window.LD = window.launchDarklyFallback;
+      };
+
+      // Try to load LaunchDarkly with error handling
+      window.addEventListener(
+        "error",
+        function (event) {
+          if (event.filename && event.filename.includes("launchdarkly")) {
+            window.handleLDError();
+            // Prevent the error from bubbling up
+            event.preventDefault();
+          }
+        },
+        true
+      );
+    </script>
+
     <!-- Firebase SDK scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -236,6 +288,12 @@
         }
       });
     </script>
+
+    <!-- LaunchDarkly SDK -->
+    <script
+      src="https://unpkg.com/launchdarkly-js-client-sdk@2.19.0/dist/ldclient.min.js"
+      onerror="handleLDError()"
+    ></script>
 
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>

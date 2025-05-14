@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:js_interop';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:portfolio/config/theme.dart';
 import 'package:portfolio/config/theme_provider.dart';
 import 'package:portfolio/config/routes.dart';
 import 'package:portfolio/utils/constants.dart';
 import 'package:portfolio/screens/home_screen.dart';
-
-// Define the external JavaScript function
-@JS('hideLoadingScreen')
-external JSFunction? get hideLoadingScreen;
+import 'package:portfolio/utils/web_platform_utils.dart';
 
 class PortfolioApp extends StatelessWidget {
   const PortfolioApp({super.key});
@@ -18,10 +15,9 @@ class PortfolioApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Hide the loading screen when the app is ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Use js_interop to call the JavaScript function
-      final hideLoadingScreenFn = hideLoadingScreen;
-      if (hideLoadingScreenFn != null) {
-        hideLoadingScreenFn.callAsFunction();
+      // Use our utility method to hide the loading screen
+      if (kIsWeb) {
+        WebPlatformUtils.hideLoadingScreen();
       }
     });
 
