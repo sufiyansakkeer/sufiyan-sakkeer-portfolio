@@ -47,7 +47,12 @@
       sizes="180x180"
       href="favicon/apple-touch-icon.png"
     />
+    <link rel="manifest" href="favicon/site.webmanifest" />
     <meta name="msapplication-TileColor" content="#2563EB" />
+    <meta
+      name="msapplication-TileImage"
+      content="favicon/web-app-manifest-192x192.png"
+    />
     <meta name="theme-color" content="#2563EB" />
 
     <title>Sufiyan Sakkeer - Portfolio</title>
@@ -217,7 +222,19 @@
 
     <script>
       // The value below is injected by flutter build, do not touch.
+      // If not replaced during build, use null as a fallback
       var serviceWorkerVersion = "{{flutter_service_worker_version}}";
+
+      // Check if the placeholder wasn't replaced (still contains the template markers)
+      if (
+        serviceWorkerVersion.includes("{{") &&
+        serviceWorkerVersion.includes("}}")
+      ) {
+        console.log(
+          "serviceWorkerVersion placeholder not replaced during build, using null"
+        );
+        serviceWorkerVersion = null;
+      }
     </script>
 
     <!-- LaunchDarkly fallback mechanism -->

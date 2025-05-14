@@ -1,5 +1,12 @@
 // Flutter web initialization script
 window.addEventListener("load", function () {
+  // Ensure serviceWorkerVersion is defined
+  if (typeof serviceWorkerVersion === "undefined") {
+    // Provide a default value if not set by the build process
+    window.serviceWorkerVersion = null;
+    console.log("serviceWorkerVersion was undefined, set to null as fallback");
+  }
+
   // Safe message handling implementation
   try {
     // Setup safe message handling functions
@@ -82,13 +89,38 @@ window.addEventListener("load", function () {
   const config = {
     // Use CanvasKit renderer for better animation performance
     renderer: "canvaskit",
-    serviceWorker: {
-      serviceWorkerVersion: serviceWorkerVersion,
-    },
   };
+
+  // Only add serviceWorker config if serviceWorkerVersion is available
+  if (serviceWorkerVersion) {
+    config.serviceWorker = {
+      serviceWorkerVersion: serviceWorkerVersion,
+    };
+  }
 
   // Try to initialize Flutter using the recommended approach
   try {
+    // Ensure _flutter object exists
+    if (typeof _flutter === "undefined" || !_flutter) {
+      console.error("_flutter object is not defined. Creating it...");
+      window._flutter = window._flutter || {};
+      window._flutter.loader = window._flutter.loader || {};
+    }
+
+    // Ensure loader object exists
+    if (!_flutter.loader) {
+      console.error("_flutter.loader is not defined. Creating it...");
+      _flutter.loader = {};
+    }
+
+    // Check if loadEntrypoint method exists
+    if (typeof _flutter.loader.loadEntrypoint !== "function") {
+      console.error(
+        "_flutter.loader.loadEntrypoint is not a function. Using fallback initialization..."
+      );
+      throw new Error("Flutter loader not properly initialized");
+    }
+
     // Load the Flutter entrypoint
     _flutter.loader.loadEntrypoint({
       // This callback is called when the entrypoint is loaded
@@ -102,8 +134,8 @@ window.addEventListener("load", function () {
           window.hideLoadingScreen = hideLoadingAnimation;
 
           // Setup error handler for runtime.lastError
-          const originalGetError = chrome.runtime && chrome.runtime.lastError;
-          if (chrome.runtime) {
+          if (typeof chrome !== "undefined" && chrome.runtime) {
+            const originalGetError = chrome.runtime.lastError;
             Object.defineProperty(chrome.runtime, "lastError", {
               get: function () {
                 try {
