@@ -63,6 +63,7 @@ dependencies:
   simple_animations: ^5.0.2
   supercharged: ^2.1.1
   lottie: ^2.7.0
+  js: ^0.7.2
 
 dev_dependencies:
   flutter_test:
