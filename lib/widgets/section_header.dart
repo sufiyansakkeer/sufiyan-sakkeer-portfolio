@@ -31,9 +31,10 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: DesignSystem.getSectionTitleStyle(context),
-          textAlign: alignment == CrossAxisAlignment.center
-              ? TextAlign.center
-              : TextAlign.start,
+          textAlign:
+              alignment == CrossAxisAlignment.center
+                  ? TextAlign.center
+                  : TextAlign.start,
         ),
 
         SizedBox(height: DesignSystem.spacingSm),
@@ -42,9 +43,10 @@ class SectionHeader extends StatelessWidget {
         Text(
           subtitle,
           style: DesignSystem.getSectionSubtitleStyle(context),
-          textAlign: alignment == CrossAxisAlignment.center
-              ? TextAlign.center
-              : TextAlign.start,
+          textAlign:
+              alignment == CrossAxisAlignment.center
+                  ? TextAlign.center
+                  : TextAlign.start,
         ),
       ],
     );
@@ -93,7 +95,9 @@ class SectionDivider extends StatelessWidget {
       thickness: thickness,
       indent: indent,
       endIndent: endIndent,
-      color: color ?? Theme.of(context).colorScheme.primary.withAlpha(51), // 0.2 opacity
+      color:
+          color ??
+          Theme.of(context).colorScheme.primary.withAlpha(51), // 0.2 opacity
     );
 
     // Apply animation if requested
@@ -139,9 +143,7 @@ class SectionContainer extends StatelessWidget {
 
     final container = Container(
       width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: defaultMinHeight,
-      ),
+      constraints: BoxConstraints(minHeight: defaultMinHeight),
       decoration: DesignSystem.getSectionDecoration(
         context,
         backgroundColor: backgroundColor,

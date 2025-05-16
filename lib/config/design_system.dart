@@ -33,6 +33,7 @@ class DesignSystem {
   static const Duration durationMedium = Duration(milliseconds: 350);
   static const Duration durationSlow = Duration(milliseconds: 500);
   static const Duration durationVerySlow = Duration(milliseconds: 800);
+  static const Duration durationVeryVerySlow = Duration(milliseconds: 1000);
 
   // Staggered animation delays
   static const Duration delayShort = Duration(milliseconds: 100);

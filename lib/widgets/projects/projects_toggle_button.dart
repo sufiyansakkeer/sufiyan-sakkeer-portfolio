@@ -7,7 +7,7 @@ class ProjectsToggleButton extends StatelessWidget {
   final bool isGridView;
   final VoidCallback onToggle;
   final bool isTransitioning;
-  
+
   const ProjectsToggleButton({
     super.key,
     required this.isGridView,
@@ -52,7 +52,7 @@ class ProjectsToggleButton extends StatelessWidget {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-            onTap: onToggle,
+            // onTap: onToggle,
             behavior: HitTestBehavior.opaque,
             child: Padding(
               padding: const EdgeInsets.only(
@@ -64,21 +64,21 @@ class ProjectsToggleButton extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.layers,
-                      size: 14,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: DesignSystem.spacingXs),
-                    Text(
-                      'back to stack view',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
+                    // Icon(
+                    //   Icons.layers,
+                    //   size: 14,
+                    //   color: Theme.of(context).colorScheme.primary,
+                    // ),
+                    // const SizedBox(width: DesignSystem.spacingXs),
+                    // Text(
+                    //   'back to stack view',
+                    //   style: TextStyle(
+                    //     color: Theme.of(context).colorScheme.primary,
+                    //     fontSize: 12,
+                    //     fontWeight: FontWeight.w500,
+                    //     letterSpacing: 1.2,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

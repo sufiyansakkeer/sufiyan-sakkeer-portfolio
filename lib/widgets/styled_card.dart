@@ -54,29 +54,38 @@ class _StyledCardState extends State<StyledCard> {
       width: widget.width,
       height: widget.height,
       constraints: widget.constraints,
-      decoration: widget.useGlassEffect
-          ? DesignSystem.getGlassEffect(context, opacity: widget.glassOpacity)
-          : DesignSystem.getCardDecoration(
-              context,
-              isHovered: _isHovered && widget.enableHover,
-            ),
+      decoration:
+          widget.useGlassEffect
+              ? DesignSystem.getGlassEffect(
+                context,
+                opacity: widget.glassOpacity,
+              )
+              : DesignSystem.getCardDecoration(
+                context,
+                isHovered: _isHovered && widget.enableHover,
+              ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: widget.onTap,
-          borderRadius: widget.borderRadius ??
+          borderRadius:
+              widget.borderRadius ??
               BorderRadius.circular(DesignSystem.radiusLg),
-          splashColor: widget.onTap != null
-              ? Theme.of(context).colorScheme.primary.withAlpha(26)
-              : Colors.transparent,
-          highlightColor: widget.onTap != null
-              ? Theme.of(context).colorScheme.primary.withAlpha(13)
-              : Colors.transparent,
-          hoverColor: widget.onTap != null && widget.enableHover
-              ? Theme.of(context).colorScheme.primary.withAlpha(8)
-              : Colors.transparent,
+          splashColor:
+              widget.onTap != null
+                  ? Theme.of(context).colorScheme.primary.withAlpha(26)
+                  : Colors.transparent,
+          highlightColor:
+              widget.onTap != null
+                  ? Theme.of(context).colorScheme.primary.withAlpha(13)
+                  : Colors.transparent,
+          hoverColor:
+              widget.onTap != null && widget.enableHover
+                  ? Theme.of(context).colorScheme.primary.withAlpha(8)
+                  : Colors.transparent,
           child: Padding(
-            padding: widget.padding ?? const EdgeInsets.all(DesignSystem.spacingMd),
+            padding:
+                widget.padding ?? const EdgeInsets.all(DesignSystem.spacingMd),
             child: widget.child,
           ),
         ),
@@ -150,16 +159,14 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = Helpers.isMobile(context);
-    
+
     return StyledCard(
       width: width,
       height: height,
       animate: animate,
       animationKey: animationKey,
       padding: EdgeInsets.zero,
-      constraints: BoxConstraints(
-        maxWidth: isMobile ? double.infinity : 350,
-      ),
+      constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 350),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -180,9 +187,7 @@ class ProjectCard extends StatelessWidget {
                     height: 180,
                     width: double.infinity,
                     color: Theme.of(context).colorScheme.primary.withAlpha(26),
-                    child: const Center(
-                      child: Icon(Icons.image, size: 48),
-                    ),
+                    child: const Center(child: Icon(Icons.image, size: 48)),
                   );
                 },
               ),
@@ -218,20 +223,23 @@ class ProjectCard extends StatelessWidget {
                 Wrap(
                   spacing: DesignSystem.spacingXs,
                   runSpacing: DesignSystem.spacingXs,
-                  children: technologies.map((tech) {
-                    return Chip(
-                      label: Text(
-                        tech,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      padding: EdgeInsets.zero,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    );
-                  }).toList(),
+                  children:
+                      technologies.map((tech) {
+                        return Chip(
+                          label: Text(
+                            tech,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          padding: EdgeInsets.zero,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        );
+                      }).toList(),
                 ),
 
                 const SizedBox(height: DesignSystem.spacingMd),
@@ -283,7 +291,11 @@ class ProjectCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16, color: Theme.of(context).colorScheme.onPrimary),
+            Icon(
+              icon,
+              size: 16,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             const SizedBox(width: DesignSystem.spacingXs),
             Text(
               label,

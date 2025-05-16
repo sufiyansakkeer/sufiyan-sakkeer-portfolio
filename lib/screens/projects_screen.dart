@@ -97,7 +97,7 @@ class _ProjectsScreenState extends State<ProjectsScreen>
       });
 
       // Reset transition state after animation completes
-      Future.delayed(DesignSystem.durationVerySlow, () {
+      Future.delayed(DesignSystem.durationSlow, () {
         if (mounted) {
           setState(() {
             _isTransitioning = false;
