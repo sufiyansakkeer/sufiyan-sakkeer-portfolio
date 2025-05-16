@@ -50,7 +50,10 @@ class AboutScreen extends StatelessWidget {
               height: 400, // Fixed height for the container
               child: Stack(
                 alignment: Alignment.center,
-                clipBehavior: Clip.none,
+                clipBehavior: Clip.none, // Ensure no clipping occurs
+                fit:
+                    StackFit
+                        .loose, // Allow children to determine their own size
                 children: [
                   // Background decorative elements
                   Positioned(
@@ -71,8 +74,8 @@ class AboutScreen extends StatelessWidget {
                   // Profile image with effects
                   const ProfileImage(),
 
-                  // Skill tags floating around
-                  const FloatingSkillTags(),
+                  // Skill tags floating around - centered in the stack
+                  const Center(child: FloatingSkillTags()),
                 ],
               ),
             ),
@@ -99,10 +102,12 @@ class AboutScreen extends StatelessWidget {
             width: double.infinity,
             child: Stack(
               alignment: Alignment.center,
-              clipBehavior: Clip.none,
+              clipBehavior: Clip.none, // Ensure no clipping occurs
+              fit: StackFit.loose, // Allow children to determine their own size
               children: const [
                 ProfileImage(),
-                FloatingSkillTags(isMobile: true),
+                // Center the floating skill tags to ensure they're properly positioned
+                Center(child: FloatingSkillTags(isMobile: true)),
               ],
             ),
           ),

@@ -366,8 +366,9 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
   late final TextStyle _textStyle = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 12,
+    fontSize: 14, // Increased font size for better readability
     decoration: TextDecoration.none,
+    letterSpacing: 0.5, // Added letter spacing for better readability
   );
 
   @override
@@ -444,7 +445,7 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
         },
         // Create the child once
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color: widget.color.withAlpha(200),
             borderRadius: BorderRadius.circular(20),
@@ -458,7 +459,15 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
               ),
             ],
           ),
-          child: Text(widget.skill, style: _textStyle),
+          // Ensure text is properly sized and doesn't get cropped
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              widget.skill,
+              style: _textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       ),
     );

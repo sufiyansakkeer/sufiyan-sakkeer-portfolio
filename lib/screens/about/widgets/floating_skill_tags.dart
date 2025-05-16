@@ -14,11 +14,19 @@ class FloatingSkillTags extends StatelessWidget {
     // Get the image size to determine the container size
     final imageSize = Helpers.isMobile(context) ? 280.0 : 320.0;
 
+    // Create a container with a larger size to ensure tags don't get cropped
+    // Add extra padding around the image size to accommodate the tags
+    final containerSize = imageSize * 1.5;
+
     // Create a container with a fixed size to hold the Stack
     return SizedBox(
-      width: imageSize,
-      height: imageSize,
-      child: Stack(children: _buildFloatingSkillTags(context)),
+      width: containerSize,
+      height: containerSize,
+      child: Stack(
+        clipBehavior: Clip.none, // Ensure no clipping occurs
+        alignment: Alignment.center, // Center the stack contents
+        children: _buildFloatingSkillTags(context),
+      ),
     );
   }
 
@@ -36,25 +44,30 @@ class FloatingSkillTags extends StatelessWidget {
 
     // Calculate positions relative to the center of the profile image
     // with better distribution and no overflow
+    // Adjust positions to ensure tags are fully visible
     final positions =
         isMobile
             ? [
-              Offset(centerX - 100, centerY - 100), // Top left
-              Offset(centerX + 100, centerY - 100), // Top right
-              Offset(centerX, centerY + 120), // Bottom center
+              Offset(centerX - 90, centerY - 90), // Top left - moved inward
+              Offset(centerX + 90, centerY - 90), // Top right - moved inward
+              Offset(centerX, centerY + 110), // Bottom center - moved inward
             ]
             : [
-              Offset(centerX - 160, centerY - 120), // Top left
-              Offset(centerX + 160, centerY - 120), // Top right
-              Offset(centerX + 180, centerY + 100), // Bottom right
-              Offset(centerX - 180, centerY + 100), // Bottom left
-              Offset(centerX, centerY + 180), // Bottom center
+              Offset(centerX - 140, centerY - 110), // Top left - moved inward
+              Offset(centerX + 140, centerY - 110), // Top right - moved inward
+              Offset(
+                centerX + 160,
+                centerY + 90,
+              ), // Bottom right - moved inward
+              Offset(centerX - 160, centerY + 90), // Bottom left - moved inward
+              Offset(centerX, centerY + 160), // Bottom center - moved inward
             ];
 
     // Use a fixed seed for deterministic randomness
     return List.generate(skills.length, (index) {
-      // Apply parallax effect with different intensity for each tag
-      final tagParallaxIntensity = 10.0 + (index * 5.0);
+      // Apply parallax effect with reduced intensity to prevent overflow
+      // Reduce the intensity to ensure tags don't move too far
+      final tagParallaxIntensity = 5.0 + (index * 2.0);
 
       return Positioned(
         left: positions[index].dx,
