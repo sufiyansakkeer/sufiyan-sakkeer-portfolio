@@ -55,6 +55,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
               animationKey: 'experience-tabs',
               duration: DesignSystem.durationMedium,
               delay: DesignSystem.delayShort,
+              rotateAngle: -0.01, // Add a small rotation for 3D effect
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
@@ -105,6 +106,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
               animationKey: 'experience-content',
               duration: DesignSystem.durationMedium,
               delay: DesignSystem.delayMedium,
+              rotateAngle: 0.01, // Add a small rotation for 3D effect
               child: SizedBox(
                 height:
                     MediaQuery.of(context).size.height *
@@ -163,6 +165,7 @@ class _ExperienceScreenState extends State<ExperienceScreen>
       duration: DesignSystem.durationMedium,
       delay: Duration(milliseconds: index * 100),
       slideOffset: const Offset(0.1, 0),
+      rotateAngle: index.isEven ? 0.01 : -0.01, // Alternate rotation for items
       child: Padding(
         padding: const EdgeInsets.only(bottom: DesignSystem.spacingMd),
         child: Row(

@@ -172,6 +172,7 @@ class _ContactScreenState extends State<ContactScreen> {
       animationKey: 'contact-item-$title',
       duration: DesignSystem.durationMedium,
       slideOffset: const Offset(0.1, 0),
+      rotateAngle: 0.01, // Add a small rotation for 3D effect
       child: Padding(
         padding: const EdgeInsets.only(bottom: DesignSystem.spacingMd),
         child: StyledCard(
@@ -246,6 +247,7 @@ class _ContactScreenState extends State<ContactScreen> {
       duration: DesignSystem.durationMedium,
       delay: DesignSystem.delayMedium,
       slideOffset: const Offset(0, 0.1),
+      rotateAngle: -0.01, // Add a small rotation for 3D effect
       child: StyledCard(
         padding: const EdgeInsets.all(DesignSystem.spacingLg),
         useGlassEffect: true,
@@ -523,6 +525,7 @@ class _ContactScreenState extends State<ContactScreen> {
     return AnimationUtilities.createVisibilityTriggeredAnimation(
       animationKey: 'contact-success',
       duration: DesignSystem.durationMedium,
+      rotateAngle: 0.01, // Add a small rotation for 3D effect
       child: StyledCard(
         padding: const EdgeInsets.all(DesignSystem.spacingLg),
         useGlassEffect: true,

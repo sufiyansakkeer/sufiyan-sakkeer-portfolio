@@ -62,6 +62,7 @@ class SectionHeader extends StatelessWidget {
         child: content,
         animationKey: 'section-header-$animationKey',
         slideOffset: const Offset(0, 0.2),
+        rotateAngle: -0.005, // Add a small rotation for 3D effect
         duration: DesignSystem.durationMedium,
       );
     }
@@ -107,6 +108,7 @@ class SectionDivider extends StatelessWidget {
         animationKey: 'section-divider-$animationKey',
         duration: DesignSystem.durationFast,
         delay: DesignSystem.delayShort,
+        rotateAngle: 0.005, // Add a small rotation for 3D effect
       );
     }
 
@@ -164,6 +166,8 @@ class SectionContainer extends StatelessWidget {
         animationKey: 'section-container-$animationKey',
         duration: DesignSystem.durationSlow,
         visibilityThreshold: 0.05,
+        rotateAngle:
+            0.002, // Add a very small rotation for a subtle 3D effect on the container
       );
     }
 

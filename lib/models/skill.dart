@@ -103,6 +103,14 @@ List<Skill> sampleSkills = [
     category: SkillCategory.database,
     isNetworkImage: true,
   ),
+  Skill(
+    name: 'Sqflite',
+    proficiency: 0.75,
+    iconPath:
+        'https://raw.githubusercontent.com/tekartik/sqflite/master/sqflite/doc/logo.png',
+    category: SkillCategory.database,
+    isNetworkImage: true,
+  ),
 
   // Tools & Technologies
   Skill(

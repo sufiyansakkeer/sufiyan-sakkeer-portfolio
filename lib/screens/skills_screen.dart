@@ -100,6 +100,10 @@ class SkillsScreen extends StatelessWidget {
     return AnimationUtilities.createVisibilityTriggeredAnimation(
       animationKey: 'skill-category-$categoryKey',
       slideOffset: const Offset(0, 0.1),
+      rotateAngle:
+          category.index.isEven
+              ? 0.01
+              : -0.01, // Alternate rotation for categories
       child: StyledCard(
         padding: const EdgeInsets.all(DesignSystem.spacingMd),
         enableHover: false,
@@ -133,6 +137,10 @@ class SkillsScreen extends StatelessWidget {
               baseAnimationKey: 'skill-item-$categoryKey',
               staggerDelay: DesignSystem.delayShort,
               slideOffset: const Offset(0.1, 0),
+              rotateAngle:
+                  category.index.isEven
+                      ? -0.005
+                      : 0.005, // Alternate rotation for items within categories
             ),
           ],
         ),

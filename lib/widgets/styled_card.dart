@@ -122,6 +122,7 @@ class _StyledCardState extends State<StyledCard> {
         animationKey: 'styled-card-${widget.animationKey}',
         duration: DesignSystem.durationMedium,
         slideOffset: widget.slideOffset ?? const Offset(0, 0.1),
+        rotateAngle: 0.005, // Add a small rotation for 3D effect
       );
     }
 

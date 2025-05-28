@@ -107,6 +107,10 @@ class ProjectsStackView extends StatelessWidget {
                           delay: Duration(milliseconds: index * 150),
                           slideOffset: const Offset(0, 0.1),
                           curve: DesignSystem.curveSmooth,
+                          rotateAngle:
+                              index.isEven
+                                  ? 0.01
+                                  : -0.01, // Add a small rotation for 3D effect
                           child: ProjectCardHero(
                             project: project,
                             heroTag: 'project-${project.title}',

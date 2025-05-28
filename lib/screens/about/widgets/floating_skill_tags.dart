@@ -4,10 +4,27 @@ import 'package:portfolio/widgets/animated_components.dart';
 import 'package:portfolio/widgets/parallax_effect.dart';
 
 /// A widget that displays floating skill tags around the profile image.
-class FloatingSkillTags extends StatelessWidget {
+class FloatingSkillTags extends StatefulWidget {
   final bool isMobile;
 
   const FloatingSkillTags({super.key, this.isMobile = false});
+
+  @override
+  State<FloatingSkillTags> createState() => _FloatingSkillTagsState();
+}
+
+class _FloatingSkillTagsState extends State<FloatingSkillTags>
+    with TickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 8),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +42,18 @@ class FloatingSkillTags extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none, // Ensure no clipping occurs
         alignment: Alignment.center, // Center the stack contents
-        children: _buildFloatingSkillTags(context),
+        children: _buildFloatingSkillTags(context, _animationController),
       ),
     );
   }
 
-  List<Widget> _buildFloatingSkillTags(BuildContext context) {
+  List<Widget> _buildFloatingSkillTags(
+    BuildContext context,
+    AnimationController animationController,
+  ) {
     // Reduce number of skill tags on mobile for better performance
     final skills =
-        isMobile
+        widget.isMobile
             ? ['Flutter', 'Dart', 'Firebase']
             : ['Flutter', 'Dart', 'Firebase', 'UI/UX', 'Mobile'];
 
@@ -46,7 +66,7 @@ class FloatingSkillTags extends StatelessWidget {
     // with better distribution and no overflow
     // Adjust positions to ensure tags are fully visible
     final positions =
-        isMobile
+        widget.isMobile
             ? [
               Offset(centerX - 90, centerY - 90), // Top left - moved inward
               Offset(centerX + 90, centerY - 90), // Top right - moved inward
@@ -77,6 +97,7 @@ class FloatingSkillTags extends StatelessWidget {
           enableScrollEffect: true,
           enableMouseTracking: !Helpers.isMobile(context),
           child: AnimatedSkillTag(
+            animationController: animationController,
             skill: skills[index],
             color: _getColorForIndex(index, context),
             // Increase delay between animations for better performance

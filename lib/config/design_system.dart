@@ -211,8 +211,8 @@ class DesignSystem {
   }
 
   // Card styles
-  static CardTheme cardTheme(ColorScheme colorScheme) {
-    return CardTheme(
+  static CardThemeData cardTheme(ColorScheme colorScheme) {
+    return CardThemeData(
       elevation: elevationSm,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radiusLg),

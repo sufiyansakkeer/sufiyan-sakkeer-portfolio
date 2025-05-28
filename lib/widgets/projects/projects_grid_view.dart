@@ -110,6 +110,10 @@ class ProjectsGridView extends StatelessWidget {
                             delay: staggerDelay,
                             slideOffset: const Offset(0, 0.05),
                             scaleStart: 0.98,
+                            rotateAngle:
+                                index.isEven
+                                    ? 0.01
+                                    : -0.01, // Alternate rotation for grid items
                             curve: DesignSystem.curveSmooth,
                             child: ProjectCardHero(
                               project: project,

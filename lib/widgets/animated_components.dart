@@ -342,12 +342,14 @@ class AnimatedSkillTag extends StatefulWidget {
   final String skill;
   final Color color;
   final Duration delay;
+  final AnimationController? animationController;
 
   const AnimatedSkillTag({
     super.key,
     required this.skill,
     required this.color,
     required this.delay,
+    this.animationController,
   });
 
   @override
@@ -356,10 +358,8 @@ class AnimatedSkillTag extends StatefulWidget {
 
 class _AnimatedSkillTagState extends State<AnimatedSkillTag>
     with TickerProviderStateMixin {
-  // Use multiple controllers for smoother, independent animations
-  late AnimationController _positionController;
   late AnimationController _scaleController;
-  late Animation<Offset> _positionAnimation;
+  late final Animation<Offset> _positionAnimation;
   late Animation<double> _scaleAnimation;
 
   // Cache the text style for better performance
@@ -375,12 +375,6 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
   void initState() {
     super.initState();
 
-    // Position animation controller
-    _positionController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 8), // Slower for smoother motion
-    );
-
     // Scale animation controller with different duration for more natural feel
     _scaleController = AnimationController(
       vsync: this,
@@ -393,7 +387,9 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
       end: const Offset(5, 5),
     ).animate(
       CurvedAnimation(
-        parent: _positionController,
+        parent:
+            widget.animationController ?? _getDefaultPositionController()
+              ..repeat(reverse: true),
         // Use custom curve for smoother, more natural floating motion
         curve: const _FloatingCurve(),
       ),
@@ -413,8 +409,6 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
     // Delayed start with different timing for more natural feel
     Future.delayed(widget.delay, () {
       if (mounted) {
-        _positionController.repeat(reverse: true);
-
         // Slight delay for scale to create more organic motion
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
@@ -427,9 +421,16 @@ class _AnimatedSkillTagState extends State<AnimatedSkillTag>
 
   @override
   void dispose() {
-    _positionController.dispose();
     _scaleController.dispose();
     super.dispose();
+  }
+
+  AnimationController _getDefaultPositionController() {
+    final controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 8), // Slower for smoother motion
+    );
+    return controller;
   }
 
   @override

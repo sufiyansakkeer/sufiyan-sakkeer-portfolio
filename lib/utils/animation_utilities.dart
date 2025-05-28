@@ -14,6 +14,7 @@ class AnimationUtilities {
     Curve curve = DesignSystem.curveDecelerate,
     Offset? slideOffset,
     double? scaleStart,
+    double? rotateAngle, // Add new parameter for rotation
     bool playOnce = true,
     double visibilityThreshold = 0.1,
   }) {
@@ -24,6 +25,7 @@ class AnimationUtilities {
       curve: curve,
       slideOffset: slideOffset,
       scaleStart: scaleStart,
+      rotateAngle: rotateAngle, // Pass the new parameter
       playOnce: playOnce,
       visibilityThreshold: visibilityThreshold,
       child: child,
@@ -39,6 +41,7 @@ class AnimationUtilities {
     Curve curve = DesignSystem.curveDecelerate,
     Offset? slideOffset,
     double? scaleStart,
+    double? rotateAngle, // Add new parameter for rotation
     bool playOnce = true,
   }) {
     return List.generate(children.length, (index) {
@@ -53,6 +56,7 @@ class AnimationUtilities {
         curve: curve,
         slideOffset: slideOffset,
         scaleStart: scaleStart,
+        rotateAngle: rotateAngle, // Pass the new parameter
         playOnce: playOnce,
       );
     });
@@ -127,6 +131,7 @@ class _VisibilityTriggeredAnimation extends StatefulWidget {
   final Curve curve;
   final Offset? slideOffset;
   final double? scaleStart;
+  final double? rotateAngle; // Add new parameter for rotation
   final bool playOnce;
   final double visibilityThreshold;
 
@@ -138,6 +143,7 @@ class _VisibilityTriggeredAnimation extends StatefulWidget {
     this.curve = DesignSystem.curveDecelerate,
     this.slideOffset,
     this.scaleStart,
+    this.rotateAngle, // Initialize the new parameter
     this.playOnce = true,
     this.visibilityThreshold = 0.1,
   });
@@ -154,6 +160,7 @@ class _VisibilityTriggeredAnimationState
   late Animation<double> _fadeAnimation;
   Animation<Offset>? _slideAnimation;
   Animation<double>? _scaleAnimation;
+  Animation<double>? _rotateAnimation; // Add new animation controller
   bool _hasPlayed = false;
 
   @override
@@ -187,6 +194,13 @@ class _VisibilityTriggeredAnimationState
       );
       if (_hasPlayed) {
         _controller.value = 1.0; // Set to end state if already played
+      }
+
+      if (widget.rotateAngle != null) {
+        _rotateAnimation = Tween<double>(
+          begin: widget.rotateAngle,
+          end: 0.0,
+        ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
       }
     }
   }
@@ -224,15 +238,24 @@ class _VisibilityTriggeredAnimationState
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
-          Widget result = FadeTransition(opacity: _fadeAnimation, child: child);
+          Widget result = child!;
+
+          if (_scaleAnimation != null) {
+            result = ScaleTransition(scale: _scaleAnimation!, child: result);
+          }
+
+          if (_rotateAnimation != null) {
+            result = Transform.rotate(
+              angle: _rotateAnimation!.value,
+              child: result,
+            );
+          }
 
           if (_slideAnimation != null) {
             result = SlideTransition(position: _slideAnimation!, child: result);
           }
 
-          if (_scaleAnimation != null) {
-            result = ScaleTransition(scale: _scaleAnimation!, child: result);
-          }
+          result = FadeTransition(opacity: _fadeAnimation, child: result);
 
           return result;
         },
