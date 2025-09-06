@@ -25,8 +25,19 @@ List<Experience> sampleExperiences = [
   // Work Experience
   Experience(
     title: 'Flutter Developer',
+    organization: 'Middle East College',
+    period: 'June 2025 - Present',
+    description:
+        'Developing scalable Flutter applications tailored to educational and institutional requirements. Maintaining clean code architecture and applying modern Flutter best practices.',
+    logoUrl:
+        'https://media.licdn.com/dms/image/C4D0BAQGfBCXZ_Kw_Ug/company-logo_200_200/0/1677566365962?e=1720051200&v=beta&t=Yd-Ij-Oe-Yd-Ij-Oe-Yd-Ij-Oe',
+    type: ExperienceType.work,
+    isNetworkImage: true,
+  ),
+  Experience(
+    title: 'Flutter Developer',
     organization: 'avua International Pvt. Ltd.',
-    period: 'July 2023 - Present',
+    period: 'July 2023 - May 2025',
     description:
         'Led the design and development of scalable and reliable cross-platform mobile applications using Flutter. Effectively collaborated with the back-end team to streamline integration, ensuring the successful delivery of two top-notch applications. Spearheaded the creation of a robust architecture, resulting in a 35% improvement in application performance. Reduced time-to-market by 30% through efficient development practices and streamlined processes.',
     logoUrl:
