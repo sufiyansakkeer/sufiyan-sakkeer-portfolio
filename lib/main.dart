@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'app.dart';
-import 'firebase_options.dart';
+import 'config/firebase_config.dart';
 import 'package:portfolio/utils/performance_optimizer.dart';
 import 'package:portfolio/utils/web_platform_utils.dart';
 
@@ -14,6 +14,9 @@ bool isFirebaseInitialized = false;
 void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize environment variables first
+  await SecureFirebaseConfig.initialize();
 
   // Initialize Firebase with proper error handling
   await initializeFirebase();
@@ -66,9 +69,9 @@ Future<void> initializeFirebase() async {
       );
     }
 
-    // Initialize Firebase with platform-specific options
+    // Initialize Firebase with platform-specific options from secure config
     final FirebaseApp app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      options: SecureFirebaseConfig.currentPlatform,
     );
 
     debugPrint('Firebase initialized successfully: ${app.name}');

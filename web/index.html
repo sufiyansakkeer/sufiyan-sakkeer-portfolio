@@ -281,28 +281,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <!-- Firebase configuration script -->
-    <script>
-      // Initialize Firebase with your web app's Firebase configuration
-      document.addEventListener("DOMContentLoaded", function () {
-        const firebaseConfig = {
-          apiKey: "AIzaSyDpZwHG4wVOUyfHXWiojDOeT6KSKMH_pbo",
-          authDomain: "sufiyan-sakkeer.firebaseapp.com",
-          projectId: "sufiyan-sakkeer",
-          storageBucket: "sufiyan-sakkeer.firebasestorage.app",
-          messagingSenderId: "804519308110",
-          appId: "1:804519308110:web:705691bcac451c7d088c1f",
-          measurementId: "G-5MDGCEN4TZ",
-        };
+    <!--
+      TEMPLATE NOTICE: Firebase configuration has been moved to environment variables
+      for security. The Flutter app will handle Firebase initialization automatically.
 
-        try {
-          // Initialize Firebase
-          firebase.initializeApp(firebaseConfig);
-          console.log("Firebase initialized successfully");
-          window.firebaseInitialized = true;
-        } catch (error) {
-          console.error("Error initializing Firebase:", error);
-          window.firebaseInitialized = false;
-        }
+      If you need to initialize Firebase directly in the web context:
+      1. Create a .env file with your Firebase configuration
+      2. Use a build process to inject environment variables
+      3. Or configure Firebase through your Flutter app only
+
+      This template approach keeps sensitive API keys out of your source code.
+    -->
+    <script>
+      // Firebase will be initialized by the Flutter app
+      // No hardcoded configuration needed here for security
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Firebase will be initialized by Flutter app");
+        window.firebaseInitialized = false; // Will be set by Flutter
       });
     </script>
 

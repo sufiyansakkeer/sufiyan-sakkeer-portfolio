@@ -53,3 +53,68 @@ app.*.map.json
 /.qodo/
 /android/
 /ios/
+
+# Security and Sensitive Data
+# Firebase configuration files with API keys
+lib/firebase_options.dart
+firebase_options.dart
+google-services.json
+GoogleService-Info.plist
+firebase.json
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+.env.*
+
+# API keys and secrets
+**/api_keys.dart
+**/secrets.dart
+**/config/secrets.*
+**/config/api_keys.*
+**/*_secrets.*
+**/*_api_keys.*
+
+# Authentication and certificates
+*.key
+*.pem
+*.p12
+*.keystore
+*.jks
+*.crt
+*.cer
+*.pfx
+
+# Configuration files that might contain secrets
+config.json
+secrets.json
+credentials.json
+service-account*.json
+*-service-account.json
+
+# Platform-specific sensitive files
+# Android
+android/app/google-services.json
+android/key.properties
+android/keystore.properties
+android/app/src/main/res/values/secrets.xml
+
+# iOS
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+ios/Runner/Info.plist.backup
+
+# Web
+web/firebase-config.js
+web/config.js
+web/secrets.js
+
+# Backup files that might contain sensitive data
+*.backup
+*.bak
+*.orig
+*.tmp
