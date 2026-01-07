@@ -36,6 +36,14 @@ List<Skill> sampleSkills = [
     isNetworkImage: true,
   ),
   Skill(
+    name: 'C#',
+    proficiency: 0.75,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
+    category: SkillCategory.language,
+    isNetworkImage: true,
+  ),
+  Skill(
     name: 'HTML',
     proficiency: 0.8,
     iconPath:
@@ -88,6 +96,22 @@ List<Skill> sampleSkills = [
 
   // Databases & Cloud
   Skill(
+    name: 'SQL Server',
+    proficiency: 0.8,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg',
+    category: SkillCategory.database,
+    isNetworkImage: true,
+  ),
+  Skill(
+    name: 'SQLite',
+    proficiency: 0.85,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
+    category: SkillCategory.database,
+    isNetworkImage: true,
+  ),
+  Skill(
     name: 'Firebase',
     proficiency: 0.85,
     iconPath:
@@ -113,6 +137,30 @@ List<Skill> sampleSkills = [
   ),
 
   // Tools & Technologies
+  Skill(
+    name: 'ASP.NET Core',
+    proficiency: 0.85,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
+    category: SkillCategory.framework,
+    isNetworkImage: true,
+  ),
+  Skill(
+    name: 'Postman',
+    proficiency: 0.9,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
+    category: SkillCategory.tool,
+    isNetworkImage: true,
+  ),
+  Skill(
+    name: 'GitHub Actions',
+    proficiency: 0.8,
+    iconPath:
+        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/githubactions/githubactions-original.svg',
+    category: SkillCategory.tool,
+    isNetworkImage: true,
+  ),
   Skill(
     name: 'Git & GitHub',
     proficiency: 0.9,

@@ -74,7 +74,7 @@ List<Project> sampleProjects = [
   Project(
     title: 'BSocial',
     description:
-        'BSocial is a cutting-edge social media app built with Flutter and Provider state management. Its sleek design ensures a seamless user experience. Features include news feeds, messaging, and profile customization.',
+        'Feature-rich app with feeds, chat, profile customization, and follow system. Integrated Firebase Authentication, Crashlytics, and push notifications.',
     imageUrl:
         'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1974&auto=format&fit=crop',
     liveUrl: null,

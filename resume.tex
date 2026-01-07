@@ -10,40 +10,45 @@
 \usepackage{amssymb}
 \usepackage{xcolor}
 \usepackage[unicode]{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue}
+\usepackage{fontawesome5} % For social/media icons
+
 \name{Sufiyan}{Sakkeer}
 
-% Custom cventry
-\newcommand*{\customcventry}[7][.13em]{
-\begin{tabular}{@{}l}
-{\bfseries #4} \\
-{\itshape #3}
-\end{tabular}
-\hfill
-\begin{tabular}{l@{}}
-{\bfseries #5} \\
-{\itshape #2}
-\end{tabular}
-\ifx&#7&%
-\else{\\
-\begin{minipage}{\maincolumnwidth}%
-\small#7%
-\end{minipage}}\fi%
-\par\addvspace{#1}}
+% Custom cventry — top-aligned and right column right-aligned for consistent layout
+\newcommand*{\customcventry}[7][.13em]{%
+  \begin{tabular}[t]{@{}l}
+    {\bfseries #4} \\[0.08em]
+    {\itshape #3}
+  \end{tabular}%
+  \hfill%
+  \begin{tabular}[t]{r@{}}
+    {\bfseries #5} \\[0.08em]
+    {\itshape #2}
+  \end{tabular}%
+  \ifx&#7&%
+  \else{\\
+    \begin{minipage}{\maincolumnwidth}%
+      \small#7%
+    \end{minipage}}%
+  \fi%
+  \par\addvspace{#1}%
+}
 
 \begin{document}
 \makecvtitle
 \vspace*{-16mm}
 \begin{center}\textbf{Flutter Developer}\end{center}
 \begin{center}
-    sufiyansakkeer616@gmail.com 
+    \href{mailto:sufiyansakkeer616@gmail.com}{sufiyansakkeer616@gmail.com} 
     \enspace \textbar \enspace
     +91 8146033008 
     \enspace \textbar \enspace
-    \href{https://www.linkedin.com/in/sufiyan-sakkeer/}{\color{blue}LinkedIn} 
+    \href{https://www.linkedin.com/in/sufiyan-sakkeer/}{LinkedIn} 
     \enspace \textbar \enspace
-    \href{https://github.com/sufiyansakkeer}{\color{blue}GitHub}
+    \href{https://github.com/sufiyansakkeer}{GitHub}
     \enspace \textbar \enspace
-    \href{https://sufiyan-sakkeer.netlify.app/}{\color{blue}Portfolio}
+    \href{https://sufiyan-sakkeer.netlify.app/}{Portfolio}
 \end{center}
 
 \section{Profile}
@@ -53,13 +58,18 @@ Results-driven Flutter developer with 2 years of experience in building responsi
 \customcventry{06/2025 – Present}{\href{https://mec.edu.om/en/}{Middle East College}}{Flutter Developer}{Muscat, Oman}{}{
 \begin{itemize}[leftmargin=0.6cm, label={\textbullet}]
 \item Developing scalable Flutter applications tailored to educational and institutional requirements.
-\item Maintaining clean code architecture and applying modern Flutter best practices.
+\item Designing and consuming RESTful APIs using \textbf{ASP.NET Core (.NET)} for mobile applications.
+\item Implemented authentication and authorization using \textbf{JWT} in .NET backend services.
+\item Worked with \textbf{Entity Framework Core} for data access, migrations, and database optimization.
+\item Collaborated on backend architecture following \textbf{Clean Architecture} and \textbf{MVC} principles.
+\item Maintaining clean code architecture and applying modern Flutter and .NET best practices.
 \end{itemize}}
+
 
 \vspace{0.7em}
 
 \customcventry{07/2023 – 05/2025}{\href{https://avua.com/}{avua International Pvt. Ltd.}}{Flutter Developer}{Chandigarh, India}{}{
-\textbf{avua} is an AI-based recruitment platform with 100k+ active users.
+\textbf{avua} is an AI-based recruitment platform with 100k+ active users.  
 \begin{itemize}[leftmargin=0.6cm, label={\textbullet}]
 \item Led the design and development of two cross-platform applications using Flutter.
 \item Collaborated with backend engineers for seamless integration of REST APIs.
@@ -76,10 +86,13 @@ Results-driven Flutter developer with 2 years of experience in building responsi
 \item \textbf{Tools:} Git, GitHub, GitHub Actions, Jira, Postman, Figma, Android Studio, Xcode, VS Code
 \item \textbf{Cloud/CI-CD:} Firebase, GitHub Actions, Play Store \& App Store Deployment
 \item \textbf{Core CS:} Data Structures \& Algorithms, Object-Oriented Programming
+\item \textbf{Backend:} ASP.NET Core, REST APIs, Entity Framework Core, JWT Authentication
+\item \textbf{Databases:} SQL Server, SQLite
 \end{itemize}
 
 \section{Projects}
-\customcventry{}{avua – Applicant App (\href{https://apps.apple.com/in/app/avua/id6469672021}{App Store}, \href{https://play.google.com/store/apps/details?id=com.app.avua}{Play Store})}{}{}{}{
+\customcventry{}{avua – Applicant App (\href{https://apps.apple.com/in/app/avua/id6469672021}{App Store}, 
+\href{https://play.google.com/store/apps/details?id=com.app.avua}{Play Store})}{}{}{}{
 \begin{itemize}[leftmargin=0.6cm, label={\textbullet}]
 \item Built AI-driven recruitment features: resume builder, video resumes, and applicant scoring.
 \item Integrated OAuth with JWT, WebSocket for messaging, and Deep Linking.
@@ -87,7 +100,8 @@ Results-driven Flutter developer with 2 years of experience in building responsi
 \item Tech stack: Flutter, REST API, FCM, OAuth, BLoC, WebSocket.
 \end{itemize}}
 
-\customcventry{}{avua Recruiter (\href{https://apps.apple.com/in/app/avua-recruiter/id6474672130}{App Store}, \href{https://play.google.com/store/apps/details?id=com.employer.app}{Play Store})}{}{}{}{
+\customcventry{}{avua Recruiter (\href{https://apps.apple.com/in/app/avua-recruiter/id6474672130}{App Store}, 
+\href{https://play.google.com/store/apps/details?id=com.employer.app}{Play Store})}{}{}{}{
 \begin{itemize}[leftmargin=0.6cm, label={\textbullet}]
 \item Developed recruiter-side features including job posting, applicant search, and avua Pool.
 \item Implemented REST API with pagination, WebSocket messaging, and flavors.
@@ -109,9 +123,11 @@ Results-driven Flutter developer with 2 years of experience in building responsi
 
 \section{Education}
 \customcventry{2019 – 2022}{\href{https://bgscollege.com/}{BGS \& SJB Group of Institutions}}{Bachelor of Computer Applications}{Bangalore, India}{}{}
-\customcventry{October 2022 – July 2023}{\href{https://www.brototype.com/}{Brototype}}{Flutter Development Internship}{Calicut, India}{}{}
+\customcventry{10/2022 – 07/2023}{\href{https://www.brototype.com/}{Brototype}}{Flutter Development Internship}{Calicut, India}{}{}
 
 \section{Publications}
-\customcventry{2024}{\href{https://www.linkedin.com/pulse/architecting-brilliance-unveiling-power-solid-software-sakkeer-0icjc/}{Architecting Brilliance: Unveiling the Power of SOLID Principles in Software Development}}{}{}{}{}
+\customcventry{\textcolor{blue}{\href{https://www.linkedin.com/pulse/architecting-brilliance-unveiling-power-solid-software-sakkeer-0icjc/}{Link}} \enspace 2024}
+{}{Architecting Brilliance: Unveiling the Power of SOLID Principles in Software Development}{}{}{}
 
 \end{document}
+

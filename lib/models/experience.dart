@@ -28,7 +28,12 @@ List<Experience> sampleExperiences = [
     organization: 'Middle East College',
     period: 'June 2025 - Present',
     description:
-        'Developing scalable Flutter applications tailored to educational and institutional requirements. Maintaining clean code architecture and applying modern Flutter best practices.',
+        '• Developing scalable Flutter applications tailored to educational and institutional requirements.\n'
+        '• Designing and consuming RESTful APIs using ASP.NET Core (.NET) for mobile applications.\n'
+        '• Implemented authentication and authorization using JWT in .NET backend services.\n'
+        '• Worked with Entity Framework Core for data access, migrations, and database optimization.\n'
+        '• Collaborated on backend architecture following Clean Architecture and MVC principles.\n'
+        '• Maintaining clean code architecture and applying modern Flutter and .NET best practices.',
     logoUrl:
         'https://media.licdn.com/dms/image/C4D0BAQGfBCXZ_Kw_Ug/company-logo_200_200/0/1677566365962?e=1720051200&v=beta&t=Yd-Ij-Oe-Yd-Ij-Oe-Yd-Ij-Oe',
     type: ExperienceType.work,
@@ -39,7 +44,12 @@ List<Experience> sampleExperiences = [
     organization: 'avua International Pvt. Ltd.',
     period: 'July 2023 - May 2025',
     description:
-        'Led the design and development of scalable and reliable cross-platform mobile applications using Flutter. Effectively collaborated with the back-end team to streamline integration, ensuring the successful delivery of two top-notch applications. Spearheaded the creation of a robust architecture, resulting in a 35% improvement in application performance. Reduced time-to-market by 30% through efficient development practices and streamlined processes.',
+        'avua is an AI-based recruitment platform with 100k+ active users.\n'
+        '• Led the design and development of two cross-platform applications using Flutter.\n'
+        '• Collaborated with backend engineers for seamless integration of REST APIs.\n'
+        '• Spearheaded architecture improvements, achieving a 35% boost in performance.\n'
+        '• Reduced time-to-market by 30% through optimized development practices.\n'
+        '• Delivered features such as real-time chat, push notifications, and deep linking.',
     logoUrl:
         'https://media.licdn.com/dms/image/C4D0BAQGfBCXZ_Kw_Ug/company-logo_200_200/0/1677566365962?e=1720051200&v=beta&t=Yd-Ij-Oe-Yd-Ij-Oe-Yd-Ij-Oe',
     type: ExperienceType.work,
